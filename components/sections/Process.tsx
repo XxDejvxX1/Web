@@ -6,10 +6,7 @@ export function Process() {
     <section id="process" className="px-4 py-24 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-[var(--container-page)]">
         <Reveal>
-          <p className="text-caption font-semibold uppercase tracking-[0.14em] text-signal-blue-text">
-            {process.eyebrow}
-          </p>
-          <h2 className="mt-4 max-w-2xl font-display text-[clamp(2.25rem,4.5vw,3rem)] leading-[1.05] text-ink-black">
+          <h2 className="max-w-2xl font-display text-[clamp(2.25rem,4.5vw,3rem)] leading-[1.05] text-ink-black">
             {process.heading}
           </h2>
         </Reveal>

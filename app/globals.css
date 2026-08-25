@@ -88,18 +88,18 @@
  * extra scroll distance past the end of the page.
  */
 :root {
-  --footer-height: 380px;
+  --footer-height: 300px;
 }
 
 @media (min-width: 640px) {
   :root {
-    --footer-height: 460px;
+    --footer-height: 320px;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --footer-height: 560px;
+    --footer-height: 340px;
   }
 }
 

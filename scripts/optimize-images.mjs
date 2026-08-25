@@ -28,8 +28,16 @@ const ART = [
   // Alpha matters: the rounded corners are transparent, so it needs no frame.
   { file: "HeroWeb.png", out: "hero-web", width: 1536, quality: 90 },
   { file: "CardBackground.png", out: "card-background", width: 1536, quality: 84 },
-  // Panoramic 3:1 band revealed beneath the page on scroll.
-  { file: "Footer.png", out: "footer", width: 2172, quality: 84 },
+  /*
+   * Panoramic band revealed beneath the page on scroll.
+   *
+   * Cropped to the top 520 of 724 rows. The reveal should stop shortly past the
+   * "Bye!" bubble (which ends at 48% of the height) rather than travelling the
+   * whole image, and with object-cover the visible slice is governed by the
+   * aspect ratio, not by the panel height — so the trim has to happen here.
+   * 520 clears the robot; cutting nearer the bubble would slice it in half.
+   */
+  { file: "Footer.png", out: "footer", width: 2172, quality: 84, crop: { top: 0, height: 520 } },
   // Transparent art, rendered at or below native size.
   { file: "GridVertical.png", out: "grid-vertical", width: 720, quality: 88 },
   { file: "Grid1.png", out: "grid-1", width: 800, quality: 88 },
@@ -65,7 +73,7 @@ async function run() {
   let before = 0;
   let after = 0;
 
-  for (const { file, out, width, quality } of ART) {
+  for (const { file, out, width, quality, crop } of ART) {
     const src = path.join(SRC, file);
     const dest = path.join(IMG_OUT, `${out}.webp`);
 
@@ -73,7 +81,17 @@ async function run() {
     // Never upscale: if the source is already narrower, keep it as-is.
     const target = Math.min(width, meta.width);
 
-    await sharp(src)
+    const pipeline = sharp(src);
+    if (crop) {
+      pipeline.extract({
+        left: 0,
+        top: crop.top,
+        width: meta.width,
+        height: Math.min(crop.height, meta.height - crop.top),
+      });
+    }
+
+    await pipeline
       .resize({ width: target, kernel: "lanczos3", withoutEnlargement: true })
       .webp({ quality, effort: 6 })
       .toFile(dest);

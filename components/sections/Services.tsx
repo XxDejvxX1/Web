@@ -1,16 +1,14 @@
 import { services } from "@/content/site";
 import { Icon } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
+import { TechLogo } from "@/components/ui/TechLogos";
 
 export function Services() {
   return (
     <section id="services" className="px-4 py-24 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-[var(--container-page)]">
         <Reveal>
-          <p className="text-caption font-semibold uppercase tracking-[0.14em] text-signal-blue-text">
-            {services.eyebrow}
-          </p>
-          <h2 className="mt-4 max-w-3xl font-display text-[clamp(2.25rem,4.5vw,3rem)] leading-[1.05] text-ink-black">
+          <h2 className="max-w-3xl font-display text-[clamp(2.25rem,4.5vw,3rem)] leading-[1.05] text-ink-black">
             {services.heading}
           </h2>
           <p className="mt-5 max-w-xl text-body text-smoke">{services.intro}</p>
@@ -53,13 +51,19 @@ export function Services() {
               <h3 className="text-caption font-semibold uppercase tracking-[0.12em] text-ink-black">
                 Built with
               </h3>
-              <ul className="mt-5 flex flex-wrap gap-2.5">
+              {/* Logos rather than wordmarks. The name still reaches assistive
+                  tech and hover via the label/title on each tile. */}
+              <ul className="mt-6 flex flex-wrap gap-3">
                 {services.stack.map((tech) => (
-                  <li
-                    key={tech}
-                    className="rounded-pill bg-ash-mist px-3.5 py-1.5 text-body-sm font-medium text-graphite"
-                  >
-                    {tech}
+                  <li key={tech}>
+                    <span
+                      title={tech}
+                      aria-label={tech}
+                      role="img"
+                      className="flex size-12 items-center justify-center rounded-2xl bg-ash-mist text-graphite transition-transform duration-200 hover:-translate-y-0.5"
+                    >
+                      <TechLogo name={tech} className="size-7" />
+                    </span>
                   </li>
                 ))}
               </ul>

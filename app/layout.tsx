@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
+import { EdgeLines } from "@/components/ui/EdgeLines";
 import { meta, site } from "@/content/site";
 import "./globals.css";
 
@@ -92,6 +93,7 @@ export default function RootLayout({
         <div className="relative z-10 mb-[var(--footer-height)] min-h-screen bg-ash-mist">
           <Nav />
           <main id="main">{children}</main>
+          <EdgeLines />
         </div>
 
         <Footer />

@@ -52,7 +52,6 @@ export const stats = [
 ] as const;
 
 export const howItWorks = {
-  eyebrow: "Process",
   heading: "How Uebi Works",
   intro:
     "Four stages, one team. No handoffs to people you have never met, and no surprises at the end.",
@@ -119,7 +118,6 @@ export const featureBand = {
 } as const;
 
 export const services = {
-  eyebrow: "Services",
   heading: "Strategy, design and development — all under one roof",
   intro:
     "Most projects need all four. Take the whole thing, or just the part you are missing.",
@@ -164,7 +162,6 @@ export const services = {
 } as const;
 
 export const process = {
-  eyebrow: "How we work",
   heading: "From first call to launch day",
   steps: [
     {
@@ -242,12 +239,68 @@ export const contact = {
   responseNote: "We reply to every enquiry within one business day.",
 } as const;
 
+/**
+ * ⚠️ PLACEHOLDER CONTENT ⚠️
+ *
+ * Every figure, quote and image below is invented so the layout can be
+ * reviewed. None of it describes real work. The page renders a visible
+ * "sample content" banner and is set to noindex for exactly this reason.
+ *
+ * Before this goes live you must either replace all of it with the real
+ * project, or delete the project from `projects` and the route with it.
+ */
 export const caseStudies = {
   eyebrow: "Case studies",
-  heading: "Work in progress",
+  heading: "Selected work",
   intro:
-    "Uebi is a new studio, and we would rather show you nothing than show you someone else's work. The first case studies land here as projects ship.",
-  body: "In the meantime, the fastest way to see how we think is to talk to us. Bring a project and we will walk you through exactly how we would approach it — structure, timeline and cost, with no obligation.",
+    "A closer look at what we build, who it is for, and what changed once it shipped.",
+
+  placeholderNotice:
+    "Sample content. Figures, copy and images below are placeholders for layout review — not real results.",
+
+  projects: [
+    {
+      slug: "teuta-apartment",
+      title: "Teuta Apartment",
+      category: "Hospitality",
+      year: "2026",
+      location: "Vlorë, Albania",
+      cover: "/images/case-studies/teuta-cover.webp",
+      coverAlt: "Placeholder image for the Teuta Apartment project",
+
+      summary:
+        "A direct-booking site for a seaside apartment that had been renting entirely through third-party platforms and losing a fifth of every booking to commission.",
+
+      challenge:
+        "Guests could only book through marketplaces, so the owner paid commission on every stay, never owned the guest relationship, and had no way to show the apartment properly — the listing template allowed eight photos and a paragraph.",
+
+      solution:
+        "A small, fast site built around the gallery and a single obvious action: check dates, then book. Availability syncs from the existing calendar, so there is one place to manage bookings rather than two. The whole thing is static and hosted for free.",
+
+      services: ["Product Strategy", "UI / UX Design", "Frontend Development"],
+
+      results: [
+        { value: "+38%", label: "Direct bookings" },
+        { value: "0%", label: "Platform commission" },
+        { value: "1.1s", label: "Largest paint" },
+      ],
+
+      testimonial: {
+        quote:
+          "Guests find us directly now, and the booking process is finally something I am happy to send people to.",
+        attribution: "Placeholder attribution",
+      },
+
+      gallery: [
+        { src: "/images/case-studies/teuta-1.webp", alt: "Placeholder project image one" },
+        { src: "/images/case-studies/teuta-2.webp", alt: "Placeholder project image two" },
+        { src: "/images/case-studies/teuta-3.webp", alt: "Placeholder project image three" },
+      ],
+    },
+  ],
+
+  ctaHeading: "Want something like this?",
+  ctaBody: "Tell us about the project and we will come back with a plan and a price.",
   ctaLabel: "Start a Project",
 } as const;
 

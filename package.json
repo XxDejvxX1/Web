@@ -11,7 +11,8 @@
     "build": "next build && node scripts/flatten-rsc-payloads.mjs",
     "images": "node scripts/optimize-images.mjs",
     "preview": "node scripts/serve-out.mjs",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "placeholders": "node scripts/make-placeholders.mjs"
   },
   "dependencies": {
     "next": "^16.0.0",
