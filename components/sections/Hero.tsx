@@ -17,7 +17,12 @@ const CANVAS_FADE =
   "rgba(247,247,247,0.22) 44%," +
   "rgba(247,247,247,0.48) 62%," +
   "rgba(247,247,247,0.76) 78%," +
-  "rgba(247,247,247,0.94) 90%," +
+  "rgba(247,247,247,0.95) 88%," +
+  // Solid well before the end, not exactly at it. Reaching 100% only on the
+  // final row leaves that row sampled at ~99.x%, and a fraction of a percent of
+  // the dark forest at the image's bottom edge is still visible against the
+  // near-white canvas — it reads as a thin leaking line.
+  "rgb(247,247,247) 96%," +
   "rgb(247,247,247) 100%)";
 
 export function Hero() {
@@ -56,6 +61,20 @@ export function Hero() {
       <div
         className="absolute inset-x-0 bottom-0 -z-10 h-[45%]"
         style={{ background: CANVAS_FADE }}
+        aria-hidden="true"
+      />
+
+      {/*
+        Solid backstop for the last few pixels. The section height is fractional
+        (814.938px at the time of writing) and the display is retina, so the
+        image and the gradient rasterise to device-pixel edges that can differ by
+        a half pixel and leave a hairline of artwork showing. This sits entirely
+        inside the region where the gradient is already solid canvas, so it is
+        invisible — it just guarantees those rows are painted by a flat colour
+        rather than by the tail of a gradient.
+      */}
+      <div
+        className="absolute inset-x-0 bottom-0 -z-10 h-3 bg-ash-mist"
         aria-hidden="true"
       />
 
