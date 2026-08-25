@@ -153,11 +153,27 @@
    * and on-aesthetic. Only applied to assets that actually render above their
    * native width — see components/ui/PixelImage.tsx.
    */
+  /*
+   * Only above 1920px, where these images genuinely render larger than their
+   * native size.
+   *
+   * Nearest-neighbour is only correct when upscaling. On a phone the hero
+   * renders at 0.8x and the feature band at 0.73x, and dropping ~20-25% of the
+   * rows unevenly aliases every strong horizontal edge — the mountain ridges
+   * and the lake horizon — into hard stray lines. Below this width the browser
+   * does a proper filtered downscale instead.
+   */
   .pixelated {
-    /* Fallback first, then the well-supported keyword — the cascade takes the
-       last valid declaration, so `pixelated` must come second to win. */
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
+    image-rendering: auto;
+  }
+
+  @media (min-width: 1920px) {
+    .pixelated {
+      /* Fallback first, then the well-supported keyword — the cascade takes the
+         last valid declaration, so `pixelated` must come second to win. */
+      image-rendering: crisp-edges;
+      image-rendering: pixelated;
+    }
   }
 
   /* Scroll reveal. Starts hidden only when JS will actually run. */

@@ -31,13 +31,19 @@ const ART = [
   /*
    * Panoramic band revealed beneath the page on scroll.
    *
-   * Cropped to the top 520 of 724 rows. The reveal should stop shortly past the
-   * "Bye!" bubble (which ends at 48% of the height) rather than travelling the
-   * whole image, and with object-cover the visible slice is governed by the
-   * aspect ratio, not by the panel height — so the trim has to happen here.
-   * 520 clears the robot; cutting nearer the bubble would slice it in half.
+   * Cropped at BOTH ends, measured off the source rather than guessed:
+   *   - the "Bye!" bubble occupies rows 272-347
+   *   - the robot's base is at row 525
+   *   - everything above row ~270 is empty sky
+   *
+   * So the window is rows 150-590. Dropping the first 150 pulls the subject up
+   * out of dead sky, and ending at 590 leaves the robot whole with a little
+   * ground under it — the previous cut at 520 sliced through its base.
+   *
+   * This has to happen here, not in CSS: under object-cover the visible slice
+   * follows the aspect ratio, not the panel height.
    */
-  { file: "Footer.png", out: "footer", width: 2172, quality: 84, crop: { top: 0, height: 520 } },
+  { file: "Footer.png", out: "footer", width: 2172, quality: 84, crop: { top: 150, height: 440 } },
   // Transparent art, rendered at or below native size.
   { file: "GridVertical.png", out: "grid-vertical", width: 720, quality: 88 },
   { file: "Grid1.png", out: "grid-1", width: 800, quality: 88 },

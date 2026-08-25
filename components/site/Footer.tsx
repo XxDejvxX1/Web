@@ -35,8 +35,10 @@ export function Footer() {
         src="/images/footer.webp"
         alt={footer.alt}
         width={2172}
-        height={520}
-        pixelated
+        height={440}
+        // No `pixelated` here: at 2172px wide this art downscales on every
+        // realistic viewport (still 0.88x at 1920), so nearest-neighbour would
+        // only ever alias it.
         sizes="100vw"
         // Anchored right-of-centre so the "Bye!" bubble and the robot stay in
         // frame at every width, including the narrow slice mobile shows.
