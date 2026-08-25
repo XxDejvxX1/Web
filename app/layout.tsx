@@ -1,0 +1,89 @@
+import type { Metadata } from "next";
+import { Inter, Playfair_Display } from "next/font/google";
+import { Nav } from "@/components/site/Nav";
+import { Footer } from "@/components/site/Footer";
+import { meta, site } from "@/content/site";
+import "./globals.css";
+
+/**
+ * Self-hosted at build time by next/font, so there is no render-blocking
+ * request to Google and no layout shift from a late swap.
+ *
+ * Playfair Display is DESIGN.md's named substitute for Perfectly Nineties, and
+ * is loaded at weight 400 only — the doc uses it for display headings alone.
+ */
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-playfair",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
+  title: {
+    default: meta.title,
+    template: `%s — ${site.name}`,
+  },
+  description: meta.description,
+  applicationName: site.name,
+  keywords: [
+    "web design",
+    "web development",
+    "Next.js development",
+    "web design studio",
+    "custom websites",
+    "web applications",
+  ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    title: meta.title,
+    description: meta.description,
+    // Pages that are not the homepage override this — otherwise every URL
+    // would advertise itself to crawlers and social cards as "/".
+    url: site.url,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: meta.title,
+    description: meta.description,
+  },
+  robots: { index: true, follow: true },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  return (
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+      <body>
+        {/*
+          .reveal starts at opacity 0 and is switched on by IntersectionObserver.
+          Without this, a visitor with JS disabled would get a blank page.
+        */}
+        <noscript>
+          <style>{`.reveal { opacity: 1 !important; transform: none !important; }`}</style>
+        </noscript>
+
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-pill focus:bg-ink-black focus:px-5 focus:py-3 focus:text-body-sm focus:font-semibold focus:text-paper-white"
+        >
+          Skip to content
+        </a>
+
+        <Nav />
+        <main id="main">{children}</main>
+        <Footer />
+      </body>
+    </html>
+  );
+}

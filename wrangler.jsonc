@@ -1,0 +1,16 @@
+{
+  // Alternative to the Cloudflare Pages git integration described in README.md.
+  // Use this only if you prefer deploying from your machine with:
+  //
+  //   npm run build && npx wrangler deploy
+  //
+  // Either path is free for a static site. Pages + GitHub is simpler because it
+  // redeploys on every push with no CLI and no local auth.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "uebi",
+  "compatibility_date": "2026-08-25",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}
