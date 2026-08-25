@@ -1,9 +1,6 @@
 import { hero } from "@/content/site";
 import { PillButton } from "@/components/ui/PillButton";
 import { PixelImage } from "@/components/ui/PixelImage";
-import { NotificationCard } from "@/components/ui/NotificationCard";
-import { QuoteBubble } from "@/components/ui/QuoteBubble";
-import { bookingHref } from "@/lib/navigation";
 
 /**
  * Eased fade from the artwork into the page canvas.
@@ -11,8 +8,7 @@ import { bookingHref } from "@/lib/navigation";
  * A plain two-stop `to bottom, transparent, #f7f7f7` bands visibly across a
  * gradient sky, because linear alpha does not match how the eye reads the
  * transition. These stops approximate an ease-in curve so the art dissolves
- * instead of stopping on an edge — this is the effect the reference site uses
- * and the one the brief called out.
+ * instead of stopping on an edge.
  */
 const CANVAS_FADE =
   "linear-gradient(to bottom," +
@@ -26,88 +22,73 @@ const CANVAS_FADE =
 
 export function Hero() {
   return (
-    <section className="relative">
-      <div className="px-3 pt-3">
-        <div className="relative isolate overflow-hidden rounded-panel">
-          <PixelImage
-            src="/images/hero-background.webp"
-            alt=""
-            width={1672}
-            height={941}
-            priority
-            // Source art is 1672px wide, so this upscales past native on large
-            // monitors — keep the pixels crisp rather than letting them blur.
-            pixelated
-            className="absolute inset-0 -z-10 size-full object-cover object-[50%_42%]"
-          />
-
-          {/* Legibility scrim: white text crosses the bright sunset band. */}
-          <div
-            className="absolute inset-0 -z-10 bg-gradient-to-r from-black/55 via-black/20 to-transparent"
-            aria-hidden="true"
-          />
-
-          {/* The fade itself, over the lower half of the panel. */}
-          <div
-            className="absolute inset-x-0 bottom-0 -z-10 h-[62%]"
-            style={{ background: CANVAS_FADE }}
-            aria-hidden="true"
-          />
-
-          <div className="mx-auto max-w-[var(--container-page)] px-6 pb-40 pt-36 sm:px-10 lg:pb-64 lg:pt-44">
-            <div className="max-w-2xl">
-              <span className="inline-flex items-center rounded-pill border border-white/25 bg-white/10 px-3.5 py-1.5 text-caption font-medium uppercase tracking-[0.14em] text-paper-white/90 backdrop-blur-sm">
-                {hero.eyebrow}
-              </span>
-
-              <h1 className="mt-6 whitespace-pre-line font-display text-[clamp(2.5rem,7vw,4.75rem)] font-normal leading-[1.02] text-paper-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.35)]">
-                {hero.headline}
-              </h1>
-
-              <p className="mt-6 max-w-lg text-body text-paper-white/85 drop-shadow-[0_1px_10px_rgba(0,0,0,0.4)] sm:text-heading-sm">
-                {hero.subhead}
-              </p>
-
-              <div className="mt-9 flex flex-wrap items-center gap-3">
-                <PillButton href={hero.primaryCta.href} variant="onImage" withArrow>
-                  {hero.primaryCta.label}
-                </PillButton>
-                <PillButton href={bookingHref()} variant="ghostOnImage">
-                  {hero.secondaryCta.label}
-                </PillButton>
-              </div>
-            </div>
-
-            <QuoteBubble quote={hero.quote} className="mt-20 lg:mt-28" />
-          </div>
-
-          <NotificationCard
-            {...hero.notification}
-            className="absolute right-8 top-32 hidden lg:flex"
-          />
-        </div>
-      </div>
+    /*
+     * Full-bleed: no inset and no rounded corners. The previous build sat the
+     * artwork inside a 12px canvas margin, which read as a white outline
+     * around the hero.
+     */
+    <section className="relative isolate overflow-hidden">
+      <PixelImage
+        src="/images/hero-background.webp"
+        alt=""
+        width={1536}
+        height={1024}
+        priority
+        // Source art is 1536px wide, so it upscales on large monitors — keep
+        // the pixels crisp rather than letting the browser blur them.
+        pixelated
+        className="absolute inset-0 -z-10 size-full object-cover object-[62%_45%]"
+      />
 
       {/*
-        The device mockup overlaps the hero's faded lower edge (DESIGN.md — "a
-        device mockup overlapping the bottom into a landscape silhouette").
-        It lives outside the rounded panel because that panel clips its
-        overflow. Overlap is reduced on small screens, where a deep pull-up
-        would crowd the headline.
+        Legibility scrim. White body copy over this sky measures 3.78:1 on its
+        own — fine for the display headline, short of the 4.5:1 the subhead
+        needs. Values measured against the real artwork: the headline crosses a bright
+        pink cloud band, which at 45%/15% left it at only 3.35:1 versus the 3:1
+        floor for large text.
       */}
-      <div className="relative z-10 -mt-24 px-4 sm:-mt-32 lg:-mt-52">
-        <div className="mx-auto max-w-4xl">
-          <div className="overflow-hidden rounded-media bg-paper-white p-1.5 shadow-lifted">
-            <PixelImage
-              src="/images/hero-web.webp"
-              alt={hero.mockupAlt}
-              width={1448}
-              height={1086}
-              priority
-              sizes="(max-width: 896px) 100vw, 896px"
-              className="w-full rounded-[24px]"
-            />
-          </div>
+      <div
+        className="absolute inset-0 -z-10 bg-gradient-to-b from-black/50 via-black/25 to-transparent"
+        aria-hidden="true"
+      />
+
+      {/* The fade itself, over the lower portion of the section. */}
+      <div
+        className="absolute inset-x-0 bottom-0 -z-10 h-[45%]"
+        style={{ background: CANVAS_FADE }}
+        aria-hidden="true"
+      />
+
+      <div className="mx-auto max-w-[var(--container-page)] px-6 pb-16 pt-32 text-center sm:pt-40 lg:pb-24">
+        <h1 className="mx-auto max-w-4xl whitespace-pre-line font-display text-[clamp(2.5rem,6.2vw,4.5rem)] font-normal leading-[1.04] text-paper-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.35)]">
+          {hero.headline}
+        </h1>
+
+        <p className="mx-auto mt-6 max-w-xl text-body text-paper-white/85 drop-shadow-[0_1px_10px_rgba(0,0,0,0.45)]">
+          {hero.subhead}
+        </p>
+
+        <div className="mt-9 flex justify-center">
+          <PillButton href={hero.primaryCta.href} variant="onImage" withArrow>
+            {hero.primaryCta.label}
+          </PillButton>
+        </div>
+
+        {/*
+          The mockup sits close under the copy, as in the reference. Its PNG
+          already carries rounded corners on a transparent background, so it
+          gets no frame — a white wrapper would reintroduce the outline.
+        */}
+        <div className="mx-auto mt-14 max-w-5xl sm:mt-16">
+          <PixelImage
+            src="/images/hero-web.webp"
+            alt={hero.mockupAlt}
+            width={1536}
+            height={1024}
+            priority
+            sizes="(max-width: 1024px) 100vw, 1024px"
+            className="w-full drop-shadow-[0_30px_60px_-30px_rgba(0,0,0,0.45)]"
+          />
         </div>
       </div>
     </section>

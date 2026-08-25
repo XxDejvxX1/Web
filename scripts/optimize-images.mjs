@@ -23,10 +23,13 @@ const APP_OUT = "app";
 /** Art assets -> WebP in public/images/ */
 const ART = [
   // Rendered full-bleed and upscaled on wide screens; CSS keeps it crisp.
-  { file: "HeroBackground.png", out: "hero-background", width: 1672, quality: 84 },
+  { file: "HeroBackground.png", out: "hero-background", width: 1536, quality: 84 },
   // Contains small UI text in the mockup — needs the highest quality here.
-  { file: "HeroWeb.png", out: "hero-web", width: 1448, quality: 90 },
+  // Alpha matters: the rounded corners are transparent, so it needs no frame.
+  { file: "HeroWeb.png", out: "hero-web", width: 1536, quality: 90 },
   { file: "CardBackground.png", out: "card-background", width: 1536, quality: 84 },
+  // Panoramic 3:1 band revealed beneath the page on scroll.
+  { file: "Footer.png", out: "footer", width: 2172, quality: 84 },
   // Transparent art, rendered at or below native size.
   { file: "GridVertical.png", out: "grid-vertical", width: 720, quality: 88 },
   { file: "Grid1.png", out: "grid-1", width: 800, quality: 88 },

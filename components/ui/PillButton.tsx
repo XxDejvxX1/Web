@@ -10,7 +10,7 @@ import { Icon } from "./Icons";
  * chromatic background — over the hero and feature-band art, buttons switch to
  * white fills and white outlines instead.
  */
-type Variant = "primary" | "ghost" | "onImage" | "ghostOnImage";
+type Variant = "primary" | "ghost" | "onImage" | "ghostOnImage" | "glass";
 
 const variants: Record<Variant, string> = {
   primary:
@@ -21,6 +21,14 @@ const variants: Record<Variant, string> = {
     "bg-paper-white text-ink-black shadow-[0_8px_24px_-12px_rgba(0,0,0,0.5)] hover:bg-ash-mist active:translate-y-px",
   ghostOnImage:
     "border-[1.5px] border-white/45 text-paper-white backdrop-blur-sm hover:bg-white/15 hover:border-white/70",
+  /*
+   * Frosted glass over artwork: a translucent white fill plus a blur of what is
+   * behind it, with a bright inner top edge to suggest a lit bevel.
+   */
+  glass:
+    "bg-white/15 text-paper-white border border-white/30 backdrop-blur-md " +
+    "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.45),0_8px_28px_-14px_rgba(0,0,0,0.6)] " +
+    "hover:bg-white/25 hover:border-white/45 active:translate-y-px",
 };
 
 /**

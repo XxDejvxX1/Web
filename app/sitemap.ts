@@ -18,5 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly",
       priority: 0.8,
     },
+    // /case-studies is intentionally omitted until it has real content — it is
+    // noindex for the same reason.
   ];
 }

@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import { Icon, type IconName } from "./Icons";
 
 type NotificationCardProps = {
@@ -9,10 +12,13 @@ type NotificationCardProps = {
 };
 
 /**
- * The small floating "new email" card from the Cofounder reference — a white
- * capsule that sits over the artwork and hints at the product without a
- * screenshot. Decorative, so it is hidden from assistive tech; the surrounding
- * section already carries the real message.
+ * The floating notification from the Cofounder reference — a white capsule over
+ * the artwork.
+ *
+ * It animates in the way a real OS notification does: slides in from the upper
+ * right with a slight spring overshoot, a beat after the card comes into view,
+ * rather than being present from the start. Decorative, so it stays hidden from
+ * assistive tech — the surrounding section already carries the message.
  */
 export function NotificationCard({
   title,
@@ -21,11 +27,40 @@ export function NotificationCard({
   icon = "mail",
   className = "",
 }: NotificationCardProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [arrived, setArrived] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    // Never leave it stuck invisible if the API is missing.
+    if (typeof IntersectionObserver === "undefined") {
+      setArrived(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setArrived(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
+      ref={ref}
       aria-hidden="true"
+      data-arrived={arrived}
       className={[
-        "flex w-[290px] items-start gap-3 rounded-[18px] bg-paper-white/95 p-3.5",
+        "notification-pop flex w-[300px] items-start gap-3 rounded-[18px] bg-paper-white/95 p-3.5",
         "shadow-[0_16px_40px_-18px_rgba(0,0,0,0.45)] backdrop-blur-md",
         className,
       ].join(" ")}

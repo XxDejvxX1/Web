@@ -14,10 +14,8 @@ export type NavItem = {
  * change the href here — nothing else needs to move.
  */
 export const navItems: NavItem[] = [
-  { label: "Services", href: "/#services" },
-  { label: "How it works", href: "/#how-it-works" },
-  { label: "Process", href: "/#process" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "Product", href: "/" },
+  { label: "Case Studies", href: "/case-studies/" },
   { label: "Contact", href: "/contact/" },
 ];
 

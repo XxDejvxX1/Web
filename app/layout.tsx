@@ -70,7 +70,7 @@ export default function RootLayout({
           Without this, a visitor with JS disabled would get a blank page.
         */}
         <noscript>
-          <style>{`.reveal { opacity: 1 !important; transform: none !important; }`}</style>
+          <style>{`.reveal, .notification-pop { opacity: 1 !important; transform: none !important; }`}</style>
         </noscript>
 
         <a
@@ -80,8 +80,20 @@ export default function RootLayout({
           Skip to content
         </a>
 
-        <Nav />
-        <main id="main">{children}</main>
+        {/*
+          Everything above the reveal footer lives in this wrapper. It must stay
+          opaque and above the footer in the stacking order, because the footer
+          is pinned behind it; the bottom margin is the extra scroll distance
+          that uncovers the footer at the end of the page.
+        */}
+        {/* min-h-screen matters on short routes: without it the wrapper stops
+            above the fold and the pinned footer shows through before the
+            visitor has scrolled anywhere. */}
+        <div className="relative z-10 mb-[var(--footer-height)] min-h-screen bg-ash-mist">
+          <Nav />
+          <main id="main">{children}</main>
+        </div>
+
         <Footer />
       </body>
     </html>

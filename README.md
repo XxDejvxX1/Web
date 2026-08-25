@@ -106,16 +106,34 @@ at Cloudflare.
 ```
 app/                  routes, layout, global CSS, sitemap, robots
   contact/            the contact page
+  case-studies/       placeholder until real projects ship (noindex)
 components/
   site/               Nav, Footer
   sections/           one file per page section
-  ui/                 buttons, cards, icons, scroll reveal
+  ui/                 buttons, cards, icons, typewriter, scroll reveal
 content/site.ts       ALL site copy
 lib/navigation.ts     nav items and the mailto/booking helpers
 assets/source/        original artwork (not served)
 public/images/        optimized WebP output (committed)
 scripts/              image pipeline, static preview server, build fixup
 ```
+
+### Two layout patterns worth knowing
+
+**The nav is `absolute`, not fixed.** It scrolls away with the hero, which is
+what lets it stay fully transparent — a fixed transparent bar would leave white
+links stranded over the white canvas further down. It switches to dark text on
+routes without a dark hero; that list is `LIGHT_NAV_ROUTES` in
+`components/site/Nav.tsx`.
+
+**The footer is revealed, not scrolled to.** It is pinned to the bottom of the
+viewport behind the page, and the content wrapper in `app/layout.tsx` carries a
+matching `margin-bottom: var(--footer-height)`. That margin is empty scroll
+distance, so the last stretch of scrolling slides the content up and uncovers
+the footer. This only works while the wrapper stays **opaque**, sits **above**
+the footer in the stacking order, and keeps `min-h-screen` — drop any of the
+three and the footer bleeds through the page. Change its height via
+`--footer-height` in `app/globals.css`; the margin follows automatically.
 
 ### Adding a page later
 

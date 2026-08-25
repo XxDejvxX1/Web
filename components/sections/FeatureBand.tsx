@@ -3,65 +3,74 @@ import { PillButton } from "@/components/ui/PillButton";
 import { PixelImage } from "@/components/ui/PixelImage";
 import { NotificationCard } from "@/components/ui/NotificationCard";
 import { QuoteBubble } from "@/components/ui/QuoteBubble";
+import { Typewriter } from "@/components/ui/Typewriter";
 
 /**
  * The Cofounder-reference panel: one big piece of artwork with a serif headline
  * and a pill CTA laid over it.
  *
- * Unlike the hero this panel is fully contained, so it keeps all four rounded
- * corners and does not fade into the canvas — a fade would erase the bottom
- * corners of a card that is meant to read as a discrete object.
- *
- * This artwork is far brighter than the hero art (pale sky, near-white paving),
- * so it needs two scrims rather than one to keep white text legible.
+ * Sized to nearly fill the viewport with a narrow margin either side. It keeps
+ * all four rounded corners and does not fade into the canvas — a fade would
+ * erase the bottom corners of a card meant to read as a discrete object.
  */
 export function FeatureBand() {
   return (
-    <section className="px-3 py-8 sm:py-12">
-      <div className="mx-auto max-w-[calc(var(--container-page)+2rem)]">
-        <div className="relative isolate flex min-h-[520px] flex-col justify-between overflow-hidden rounded-panel p-8 sm:p-12 lg:min-h-[580px] lg:p-16">
-          <PixelImage
-            src="/images/card-background.webp"
-            alt={featureBand.alt}
-            width={1536}
-            height={1024}
-            pixelated
-            sizes="(max-width: 1264px) 100vw, 1264px"
-            className="absolute inset-0 -z-10 size-full object-cover object-center"
-          />
+    <section className="px-3 py-10 sm:px-5 sm:py-16">
+      <div className="relative isolate flex min-h-[88vh] flex-col justify-between overflow-hidden rounded-panel p-7 sm:p-12 lg:min-h-[92vh] lg:p-16">
+        <PixelImage
+          src="/images/card-background.webp"
+          alt={featureBand.alt}
+          width={1536}
+          height={1024}
+          pixelated
+          sizes="100vw"
+          className="absolute inset-0 -z-10 size-full object-cover object-[64%_50%]"
+        />
 
-          <div
-            className="absolute inset-0 -z-10 bg-gradient-to-r from-black/70 via-black/30 to-transparent"
-            aria-hidden="true"
-          />
-          <div
-            className="absolute inset-0 -z-10 bg-gradient-to-t from-black/50 via-transparent to-transparent"
-            aria-hidden="true"
-          />
+        {/* Two scrims: the sky is bright enough that one is not sufficient for
+            white text at body size. */}
+        <div
+          className="absolute inset-0 -z-10 bg-gradient-to-r from-black/60 via-black/25 to-transparent"
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 -z-10 bg-gradient-to-t from-black/45 via-transparent to-black/20"
+          aria-hidden="true"
+        />
 
-          <div className="max-w-xl">
-            <h2 className="whitespace-pre-line font-display text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.03] text-paper-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)]">
-              {featureBand.headline}
-            </h2>
+        <div className="max-w-2xl">
+          <h2 className="whitespace-pre-line font-display text-[clamp(2.25rem,5.2vw,4rem)] leading-[1.03] text-paper-white drop-shadow-[0_2px_24px_rgba(0,0,0,0.45)]">
+            {featureBand.headline}
+          </h2>
 
-            <p className="mt-6 max-w-md text-body text-paper-white/85 drop-shadow-[0_1px_10px_rgba(0,0,0,0.5)]">
-              {featureBand.body}
-            </p>
+          <p className="mt-7 text-body text-paper-white/90 drop-shadow-[0_1px_10px_rgba(0,0,0,0.5)] sm:text-heading-sm">
+            {featureBand.typewriterPrefix}{" "}
+            <Typewriter
+              phrases={featureBand.typewriterPhrases}
+              className="font-medium text-paper-white"
+            />
+          </p>
 
-            <div className="mt-9">
-              <PillButton href={featureBand.cta.href} variant="onImage" withArrow>
-                {featureBand.cta.label}
-              </PillButton>
-            </div>
+          <div className="mt-10">
+            {/* Glass treatment: translucent white over the artwork rather than a
+                solid fill, and a size down from the hero button. */}
+            <PillButton
+              href={featureBand.cta.href}
+              variant="glass"
+              size="sm"
+              withArrow
+            >
+              {featureBand.cta.label}
+            </PillButton>
           </div>
-
-          <QuoteBubble quote={featureBand.quote} className="mt-16 max-w-sm" />
-
-          <NotificationCard
-            {...featureBand.notification}
-            className="absolute right-8 top-8 hidden lg:flex"
-          />
         </div>
+
+        <QuoteBubble quote={featureBand.quote} className="mt-16 max-w-sm" />
+
+        <NotificationCard
+          {...featureBand.notification}
+          className="absolute right-6 top-6 hidden sm:flex lg:right-10 lg:top-10"
+        />
       </div>
     </section>
   );

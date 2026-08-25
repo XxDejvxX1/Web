@@ -2,125 +2,81 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 import { navItems } from "@/lib/navigation";
 import { site } from "@/content/site";
-import { Icon } from "@/components/ui/Icons";
-import { PillButton } from "@/components/ui/PillButton";
 
 /**
- * Floating capsule rather than a full-width bar (DESIGN.md — "Floating Nav
- * Capsule ... replaces a traditional full-width header bar"). It sits over the
- * hero art, where the white pill reads cleanly against the deep blue sky.
+ * Routes whose hero is dark artwork, so the nav sets itself in white. Every
+ * other route sits on the pale canvas and needs ink.
  */
+const LIGHT_NAV_ROUTES = ["/"];
+
+const tones = {
+  light: {
+    brand: "text-paper-white",
+    link: "text-paper-white/75 hover:text-paper-white",
+    active: "bg-white/15 text-paper-white",
+  },
+  dark: {
+    brand: "text-ink-black",
+    link: "text-graphite hover:text-ink-black",
+    active: "bg-black/[0.07] text-ink-black",
+  },
+} as const;
+
 export function Nav() {
-  const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const normalized = pathname.endsWith("/") ? pathname : `${pathname}/`;
+  const tone = tones[LIGHT_NAV_ROUTES.includes(normalized) ? "light" : "dark"];
 
-  // Close the sheet on navigation — the landing-page links are anchors, which
-  // do not unmount anything on their own.
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
-  // While the sheet is open, hold the page still and let Escape dismiss it.
-  useEffect(() => {
-    if (!open) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onKeyDown);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [open]);
-
+  /*
+   * Absolute, not fixed — the nav scrolls away with the hero, which is what
+   * lets it stay fully transparent. A fixed transparent bar would put white
+   * links over the white canvas further down the page and disappear.
+   */
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-5">
-      <div className="mx-auto max-w-[var(--container-page)]">
-        <div className="flex items-center justify-between gap-4 rounded-nav bg-paper-white/95 py-2 pl-3 pr-2 shadow-glow backdrop-blur-md">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 rounded-xl py-1 pl-1 pr-2"
-            aria-label={`${site.name} — home`}
+    <header className="absolute inset-x-0 top-0 z-50 px-5 py-6 sm:px-8 sm:py-7">
+      <div className="mx-auto flex max-w-[var(--container-page)] items-center justify-between gap-4">
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 rounded-xl"
+          aria-label={`${site.name} — home`}
+        >
+          <img
+            src="/images/brand-mark.webp"
+            alt=""
+            width={128}
+            height={128}
+            className="size-8 rounded-[9px] sm:size-9"
+          />
+          <span
+            className={`text-heading-sm font-semibold tracking-[-0.01em] ${tone.brand}`}
           >
-            <img
-              src="/images/brand-mark.webp"
-              alt=""
-              width={128}
-              height={128}
-              className="size-8 rounded-[9px]"
-            />
-            <span className="flex flex-col leading-none">
-              <span className="text-heading-sm font-semibold uppercase tracking-[0.09em] text-ink-black">
-                {site.name}
-              </span>
-              <span className="mt-1 hidden text-micro uppercase tracking-[0.14em] text-smoke sm:block">
-                {site.tagline}
-              </span>
-            </span>
-          </Link>
+            {site.name}
+          </span>
+        </Link>
 
-          <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
-            {navItems.map((item) => (
+        {/* Three links fit inline even at 375px, so there is no hamburger. */}
+        <nav aria-label="Main" className="flex items-center gap-0.5 sm:gap-1.5">
+          {navItems.map((item) => {
+            const target = item.href.endsWith("/") ? item.href : `${item.href}/`;
+            const isCurrent = normalized === target;
+
+            return (
               <Link
                 key={item.href}
                 href={item.href}
-                className="rounded-lg px-3 py-1.5 text-body-sm font-medium text-ink-black transition-opacity duration-200 hover:opacity-60"
+                aria-current={isCurrent ? "page" : undefined}
+                className={[
+                  "rounded-pill px-2.5 py-1.5 text-[13px] font-medium whitespace-nowrap transition-colors duration-200 sm:px-4 sm:text-body-sm",
+                  isCurrent ? tone.active : tone.link,
+                ].join(" ")}
               >
                 {item.label}
               </Link>
-            ))}
-          </nav>
-
-          <div className="hidden md:block">
-            <PillButton href="/contact/" size="sm">
-              Start a Project
-            </PillButton>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setOpen((value) => !value)}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? "Close menu" : "Open menu"}
-            className="flex size-10 items-center justify-center rounded-xl text-ink-black transition-colors hover:bg-ash-mist md:hidden"
-          >
-            <Icon name={open ? "close" : "menu"} size={22} />
-          </button>
-        </div>
-
-        {open && (
-          <div
-            id="mobile-menu"
-            className="mt-2 overflow-hidden rounded-nav bg-paper-white p-3 shadow-glow md:hidden"
-          >
-            <nav aria-label="Mobile" className="flex flex-col">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-xl px-3 py-3 text-body font-medium text-ink-black transition-colors hover:bg-ash-mist"
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
-            <div className="mt-2 px-1 pb-1">
-              <PillButton href="/contact/" className="w-full justify-center">
-                Start a Project
-              </PillButton>
-            </div>
-          </div>
-        )}
+            );
+          })}
+        </nav>
       </div>
     </header>
   );

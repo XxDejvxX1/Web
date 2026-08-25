@@ -36,18 +36,10 @@ export const meta = {
 } as const;
 
 export const hero = {
-  eyebrow: "Web design & development studio",
   headline: "Great websites.\nMeaningful impact.",
   subhead:
-    "We design and build custom websites and web applications crafted for performance and growth.",
+    "We design and build custom websites and web applications crafted for performance and growth. Strategy, design and development under one roof — no templates, no page builders, no lock-in.",
   primaryCta: { label: "Start a Project", href: "/contact/" },
-  secondaryCta: { label: "Book a Call", href: "/contact/" },
-  notification: {
-    title: "New enquiry received",
-    body: "Thanks for reaching out — we reply within one business day.",
-    time: "now",
-  },
-  quote: "Every brand deserves a site\nthat works as hard as they do.",
   mockupAlt:
     "Pixel-art illustration of a web studio interface showing a project overview, services and deliverables",
 } as const;
@@ -106,16 +98,24 @@ export const howItWorks = {
 } as const;
 
 export const featureBand = {
-  headline: "Small studio.\nSerious craft.",
-  body: "No account managers, no handoffs to a junior team. You work directly with the people designing and building your site — from the first sketch to launch day and beyond.",
-  cta: { label: "Start a Project", href: "/contact/" },
+  headline: "Uebi lets you bring\nyour business to life",
+
+  /** Static lead-in that sits before the rotating typewriter phrases. */
+  typewriterPrefix: "Uebi helps you with things like",
+  typewriterPhrases: [
+    "design your website",
+    "build your website",
+    "maintain your website",
+  ],
+
+  cta: { label: "Get Uebi", href: "/contact/" },
   notification: {
-    title: "Project update",
-    body: "Homepage design is ready for your review.",
+    title: "New email from Uebi",
+    body: "Thanks for getting in touch! Let's bring your business online.",
     time: "now",
   },
-  quote: "The best work comes from small teams\nwho actually care about the details.",
-  alt: "Pixel-art illustration of a sunlit city square at golden hour",
+  quote: "Every business needs a website,\nnot everyone has one.",
+  alt: "Pixel-art illustration of Skanderbeg Square in Tirana at dusk",
 } as const;
 
 export const services = {
@@ -242,6 +242,15 @@ export const contact = {
   responseNote: "We reply to every enquiry within one business day.",
 } as const;
 
+export const caseStudies = {
+  eyebrow: "Case studies",
+  heading: "Work in progress",
+  intro:
+    "Uebi is a new studio, and we would rather show you nothing than show you someone else's work. The first case studies land here as projects ship.",
+  body: "In the meantime, the fastest way to see how we think is to talk to us. Bring a project and we will walk you through exactly how we would approach it — structure, timeline and cost, with no obligation.",
+  ctaLabel: "Start a Project",
+} as const;
+
 export const footer = {
   blurb:
     "A small web design and development studio building fast, accessible sites for brands that care about the details.",
@@ -249,18 +258,21 @@ export const footer = {
     {
       title: "Studio",
       links: [
-        { label: "Services", href: "/#services" },
-        { label: "Process", href: "/#process" },
-        { label: "How it works", href: "/#how-it-works" },
-        { label: "FAQ", href: "/#faq" },
+        { label: "Product", href: "/" },
+        { label: "Case Studies", href: "/case-studies/" },
+        { label: "Contact", href: "/contact/" },
       ],
     },
     {
-      title: "Get in touch",
+      title: "Explore",
       links: [
-        { label: "Contact", href: "/contact/" },
-        { label: "Start a Project", href: "/contact/" },
+        { label: "Services", href: "/#services" },
+        { label: "How it works", href: "/#how-it-works" },
+        { label: "Process", href: "/#process" },
+        { label: "FAQ", href: "/#faq" },
       ],
     },
   ],
+  signoff: "Built in Tirana.",
+  alt: "Pixel-art illustration of a robot waving goodbye above a mountain lake at dusk",
 } as const;
