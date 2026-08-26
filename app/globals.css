@@ -212,27 +212,27 @@
    * Scroll-linked curtain reveal (motion.dev's scroll image reveal effect,
    * done on a CSS scroll-progress timeline).
    *
-   * Two knobs:
+   * The reveal runs from the moment the panel's top edge reaches the bottom of
+   * the viewport (`cover 0%`) to the moment its centre reaches the centre of
+   * the viewport (`cover 50%`), and it runs linear.
    *
-   *   animation-range — how much scrolling the reveal is spread across.
-   *     `cover 0%` is the moment the panel's top edge reaches the bottom of the
-   *     viewport; `cover 50%` would be the moment its centre reaches the centre
-   *     of the viewport. Running to 55% stretches it a little past that, so the panel is
-   *     still opening as it settles around the middle of the screen.
+   * Both of those matter. Ending at 50% means the panel is at full width by the
+   * time it is properly in view, rather than sitting there still narrow; and
+   * linear keeps it opening steadily instead of holding narrow and rushing at
+   * the end. An earlier version pushed the end to 55% with ease-in, which left
+   * the card looking shrunken while it was front and centre.
    *
-   *   animation-timing-function — ease-in back-loads the movement. Linear looks
-   *     finished early, because the last stretch of a clip inset is a small
-   *     visual change; holding it narrower for longer means it reaches full
-   *     width right as the panel hits the middle, rather than well before.
+   * `linear` is set explicitly — the animation shorthand would otherwise
+   * default to `ease`.
    *
    * Unsupported (Firefox) falls through the @supports guard with no clip at
    * all, so the panel is simply visible.
    */
   @supports (animation-timeline: view()) {
     .scroll-reveal {
-      animation: scroll-reveal-open both ease-in;
+      animation: scroll-reveal-open both linear;
       animation-timeline: view();
-      animation-range: cover 0% cover 55%;
+      animation-range: cover 0% cover 50%;
     }
   }
 
