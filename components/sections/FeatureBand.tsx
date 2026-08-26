@@ -4,6 +4,7 @@ import { PixelImage } from "@/components/ui/PixelImage";
 import { NotificationCard } from "@/components/ui/NotificationCard";
 import { QuoteBubble } from "@/components/ui/QuoteBubble";
 import { Typewriter } from "@/components/ui/Typewriter";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 /**
  * The Cofounder-reference panel: one big piece of artwork with a serif headline
@@ -16,6 +17,10 @@ import { Typewriter } from "@/components/ui/Typewriter";
 export function FeatureBand() {
   return (
     <section className="px-3 py-10 sm:px-5 sm:py-16">
+      {/* The whole panel is revealed, not just its artwork — the card should
+          arrive as one object rather than have copy floating over an opening
+          image. Radius matches rounded-panel so the corners survive the clip. */}
+      <ScrollReveal radius={40}>
       <div className="relative isolate flex min-h-[88vh] flex-col justify-between overflow-hidden rounded-panel p-7 sm:p-12 lg:min-h-[92vh] lg:p-16">
         <PixelImage
           src="/images/card-background.webp"
@@ -76,7 +81,8 @@ export function FeatureBand() {
           {...featureBand.notification}
           className="absolute right-10 top-10 hidden xl:flex"
         />
-      </div>
+        </div>
+      </ScrollReveal>
     </section>
   );
 }

@@ -1,11 +1,11 @@
 /**
- * Generates placeholder plates for case studies that have no real photography
- * yet. Run with `npm run placeholders`.
+ * Generates placeholder plates for sections that have no real photography yet.
+ * Run with `npm run placeholders`.
  *
  * These are deliberately abstract gradients with a picture glyph — never
- * anything that could be mistaken for a real photograph of a real property.
- * Replace the files in public/images/case-studies/ with real images and delete
- * this script once the shoot is done.
+ * anything that could be mistaken for a real photograph. Replace the files in
+ * public/images/<dir>/ with real images and delete this script once the shoot
+ * is done.
  *
  * No text is drawn: SVG text rendering depends on system fonts being visible to
  * sharp, which is unreliable on Windows. Everything here is paths and shapes.
@@ -14,7 +14,7 @@ import sharp from "sharp";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 
-const OUT = "public/images/case-studies";
+const OUT_ROOT = "public/images";
 
 /** Palette pulled from the pixel art so the plates sit alongside it. */
 const PALETTES = [
@@ -62,20 +62,28 @@ function plate(width, height, [a, b, c], seed) {
 }
 
 const TARGETS = [
-  { name: "teuta-cover", width: 1600, height: 900, palette: 0 },
-  { name: "teuta-1", width: 900, height: 675, palette: 1 },
-  { name: "teuta-2", width: 900, height: 675, palette: 2 },
-  { name: "teuta-3", width: 900, height: 675, palette: 3 },
+  { name: "teuta-cover", dir: "case-studies", width: 1600, height: 900, palette: 0 },
+  { name: "teuta-1", dir: "case-studies", width: 900, height: 675, palette: 1 },
+  { name: "teuta-2", dir: "case-studies", width: 900, height: 675, palette: 2 },
+  { name: "teuta-3", dir: "case-studies", width: 900, height: 675, palette: 3 },
+
+  // One per process step, until real screenshots exist.
+  { name: "process-1", dir: "process", width: 1000, height: 750, palette: 0 },
+  { name: "process-2", dir: "process", width: 1000, height: 750, palette: 1 },
+  { name: "process-3", dir: "process", width: 1000, height: 750, palette: 2 },
+  { name: "process-4", dir: "process", width: 1000, height: 750, palette: 3 },
 ];
 
 async function run() {
-  await mkdir(OUT, { recursive: true });
-
   for (const [i, t] of TARGETS.entries()) {
-    const dest = path.join(OUT, `${t.name}.webp`);
+    const outDir = path.join(OUT_ROOT, t.dir);
+    await mkdir(outDir, { recursive: true });
+
+    const dest = path.join(outDir, `${t.name}.webp`);
     await sharp(plate(t.width, t.height, PALETTES[t.palette], i * 17 + 5))
       .webp({ quality: 82, effort: 6 })
       .toFile(dest);
+
     console.log(`wrote ${dest}  (${t.width}x${t.height})`);
   }
 }

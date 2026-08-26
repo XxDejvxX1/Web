@@ -163,22 +163,35 @@ export const services = {
 
 export const process = {
   heading: "From first call to launch day",
+
+  /**
+   * Rendered as alternating full-width rows. `image` is a placeholder plate for
+   * now — swap in a real screenshot per step and the layout does not change.
+   */
   steps: [
     {
       title: "Discovery",
       body: "A call and a short brief. We map out goals, audience, scope and budget, then send a fixed quote — no hourly guesswork.",
+      image: "/images/process/process-1.webp",
+      alt: "Placeholder visual for the discovery stage",
     },
     {
       title: "Design",
       body: "Structure first, then visuals. You see real designs early and often, and nothing moves forward without your sign-off.",
+      image: "/images/process/process-2.webp",
+      alt: "Placeholder visual for the design stage",
     },
     {
       title: "Build",
       body: "Development on a staging URL you can visit any time. Weekly updates, so you always know exactly where the project stands.",
+      image: "/images/process/process-3.webp",
+      alt: "Placeholder visual for the build stage",
     },
     {
       title: "Launch",
       body: "Testing, performance tuning, analytics and deployment. You get the keys, the code and a walkthrough of how it all works.",
+      image: "/images/process/process-4.webp",
+      alt: "Placeholder visual for the launch stage",
     },
   ],
 } as const;
