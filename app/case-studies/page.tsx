@@ -57,7 +57,7 @@ export default function CaseStudiesPage() {
                   src={project.cover}
                   alt={project.coverAlt}
                   width={1600}
-                  height={900}
+                  height={762}
                   sizes="(max-width: 1200px) 100vw, 1200px"
                   className="w-full"
                 />
@@ -153,22 +153,27 @@ export default function CaseStudiesPage() {
               </Reveal>
             </div>
 
-            <Reveal>
-              <ul className="mt-14 grid gap-5 sm:grid-cols-3">
-                {project.gallery.map((shot) => (
-                  <li key={shot.src} className="overflow-hidden rounded-card">
-                    <PixelImage
-                      src={shot.src}
-                      alt={shot.alt}
-                      width={900}
-                      height={675}
-                      sizes="(max-width: 640px) 100vw, 380px"
-                      className="w-full"
-                    />
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
+            {/* Stacked rather than a grid: these are wide screenshots at
+                differing aspect ratios, and a three-up row would shrink them
+                past the point of being readable. */}
+            <ul className="mt-14 flex flex-col gap-6">
+              {project.gallery.map((shot, index) => (
+                <li key={shot.src}>
+                  <Reveal delay={index * 60}>
+                    <figure className="overflow-hidden rounded-card shadow-glow">
+                      <PixelImage
+                        src={shot.src}
+                        alt={shot.alt}
+                        width={1200}
+                        height={640}
+                        sizes="(max-width: 1200px) 100vw, 1200px"
+                        className="w-full"
+                      />
+                    </figure>
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
           </div>
         </article>
       ))}

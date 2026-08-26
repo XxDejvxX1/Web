@@ -165,33 +165,34 @@ export const process = {
   heading: "From first call to launch day",
 
   /**
-   * Rendered as alternating full-width rows. `image` is a placeholder plate for
-   * now — swap in a real screenshot per step and the layout does not change.
+   * Rendered as a pinned horizontal scroller — one panel per step. Images are
+   * square and deliberately small, sitting beside their copy rather than
+   * dominating it.
    */
   steps: [
     {
       title: "Discovery",
       body: "A call and a short brief. We map out goals, audience, scope and budget, then send a fixed quote — no hourly guesswork.",
-      image: "/images/process/process-1.webp",
-      alt: "Placeholder visual for the discovery stage",
+      image: "/images/process/discovery.webp",
+      alt: "Pixel-art robot holding a magnifying glass and a treasure map",
     },
     {
       title: "Design",
       body: "Structure first, then visuals. You see real designs early and often, and nothing moves forward without your sign-off.",
-      image: "/images/process/process-2.webp",
-      alt: "Placeholder visual for the design stage",
+      image: "/images/process/design.webp",
+      alt: "Pixel-art robot arranging a layout with a pen and colour swatches",
     },
     {
       title: "Build",
       body: "Development on a staging URL you can visit any time. Weekly updates, so you always know exactly where the project stands.",
-      image: "/images/process/process-3.webp",
-      alt: "Placeholder visual for the build stage",
+      image: "/images/process/build.webp",
+      alt: "Pixel-art robot assembling a web page from building blocks",
     },
     {
       title: "Launch",
       body: "Testing, performance tuning, analytics and deployment. You get the keys, the code and a walkthrough of how it all works.",
-      image: "/images/process/process-4.webp",
-      alt: "Placeholder visual for the launch stage",
+      image: "/images/process/launch.webp",
+      alt: "Pixel-art robot cheering as a rocket lifts off",
     },
   ],
 } as const;
@@ -253,14 +254,12 @@ export const contact = {
 } as const;
 
 /**
- * ⚠️ PLACEHOLDER CONTENT ⚠️
+ * Images and descriptions are real — screenshots of the live Teuta Apartment
+ * site, and copy describing what it actually does.
  *
- * Every figure, quote and image below is invented so the layout can be
- * reviewed. None of it describes real work. The page renders a visible
- * "sample content" banner and is set to noindex for exactly this reason.
- *
- * Before this goes live you must either replace all of it with the real
- * project, or delete the project from `projects` and the route with it.
+ * ⚠️ The `results` figures and the `testimonial` are still invented. ⚠️
+ * The page carries a visible notice and stays noindex until they are replaced
+ * with real numbers, or removed.
  */
 export const caseStudies = {
   eyebrow: "Case studies",
@@ -269,7 +268,7 @@ export const caseStudies = {
     "A closer look at what we build, who it is for, and what changed once it shipped.",
 
   placeholderNotice:
-    "Sample content. Figures, copy and images below are placeholders for layout review — not real results.",
+    "The results figures and the quote below are placeholders, not real numbers. Everything else is the live site.",
 
   projects: [
     {
@@ -277,18 +276,19 @@ export const caseStudies = {
       title: "Teuta Apartment",
       category: "Hospitality",
       year: "2026",
-      location: "Vlorë, Albania",
-      cover: "/images/case-studies/teuta-cover.webp",
-      coverAlt: "Placeholder image for the Teuta Apartment project",
+      location: "Durrës, Albania",
+      cover: "/images/case-studies/teuta-hero.webp",
+      coverAlt:
+        "The Teuta Apartment homepage: a sea view through open curtains, headed 'Wake up on the first line of the sea'",
 
       summary:
-        "A direct-booking site for a seaside apartment that had been renting entirely through third-party platforms and losing a fifth of every booking to commission.",
+        "A direct-booking site for a seaside apartment in Durrës that had been letting entirely through third-party platforms.",
 
       challenge:
-        "Guests could only book through marketplaces, so the owner paid commission on every stay, never owned the guest relationship, and had no way to show the apartment properly — the listing template allowed eight photos and a paragraph.",
+        "Guests could only book through marketplaces, so the owner paid commission on every stay, never owned the guest relationship, and had no way to show the apartment properly — a listing template allows a handful of photos and a paragraph.",
 
       solution:
-        "A small, fast site built around the gallery and a single obvious action: check dates, then book. Availability syncs from the existing calendar, so there is one place to manage bookings rather than two. The whole thing is static and hosted for free.",
+        "A small, fast site built around the things that actually convert a booking: a full-bleed gallery of the apartment and the beach it sits on, a live availability calendar that prices a stay as you pick dates, real guest reviews, and a WhatsApp button so enquiries land where the owner already answers them.",
 
       services: ["Product Strategy", "UI / UX Design", "Frontend Development"],
 
@@ -305,9 +305,18 @@ export const caseStudies = {
       },
 
       gallery: [
-        { src: "/images/case-studies/teuta-1.webp", alt: "Placeholder project image one" },
-        { src: "/images/case-studies/teuta-2.webp", alt: "Placeholder project image two" },
-        { src: "/images/case-studies/teuta-3.webp", alt: "Placeholder project image three" },
+        {
+          src: "/images/case-studies/teuta-gallery.webp",
+          alt: "The gallery section, a wide carousel of apartment and beach photography",
+        },
+        {
+          src: "/images/case-studies/teuta-availability.webp",
+          alt: "The availability calendar, with a four-night stay selected and priced",
+        },
+        {
+          src: "/images/case-studies/teuta-reviews.webp",
+          alt: "The guest reviews carousel, headed 'What guests have said'",
+        },
       ],
     },
   ],

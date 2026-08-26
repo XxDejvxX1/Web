@@ -51,6 +51,21 @@ const ART = [
   { file: "Grid3.png", out: "grid-3", width: 800, quality: 88 },
   // Brand mark for the nav capsule and footer.
   { file: "FavIcon.png", out: "brand-mark", width: 128, quality: 90 },
+
+  /*
+   * Process steps. Square, rendered small beside their copy (~190px at most),
+   * so 420 is already 2x for retina.
+   */
+  { file: "ProcessDiscovery.png", out: "process/discovery", width: 420, quality: 88 },
+  { file: "ProcessDesign.png", out: "process/design", width: 420, quality: 88 },
+  { file: "ProcessBuild.png", out: "process/build", width: 420, quality: 88 },
+  { file: "ProcessLaunch.png", out: "process/launch", width: 420, quality: 88 },
+
+  // Teuta Apartment case study — real screenshots of the live site.
+  { file: "TeutaHero.png", out: "case-studies/teuta-hero", width: 1600, quality: 86 },
+  { file: "TeutaGallery.png", out: "case-studies/teuta-gallery", width: 1200, quality: 86 },
+  { file: "TeutaReviews.png", out: "case-studies/teuta-reviews", width: 1200, quality: 86 },
+  { file: "TeutaAvailability.png", out: "case-studies/teuta-availability", width: 1040, quality: 86 },
 ];
 
 /**
@@ -82,6 +97,9 @@ async function run() {
   for (const { file, out, width, quality, crop } of ART) {
     const src = path.join(SRC, file);
     const dest = path.join(IMG_OUT, `${out}.webp`);
+
+    // `out` may carry a subdirectory, e.g. "process/discovery".
+    await mkdir(path.dirname(dest), { recursive: true });
 
     const meta = await sharp(src).metadata();
     // Never upscale: if the source is already narrower, keep it as-is.
