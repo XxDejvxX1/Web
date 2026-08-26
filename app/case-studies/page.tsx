@@ -4,6 +4,7 @@ import { Icon } from "@/components/ui/Icons";
 import { PillButton } from "@/components/ui/PillButton";
 import { PixelImage } from "@/components/ui/PixelImage";
 import { Reveal } from "@/components/ui/Reveal";
+import { BrowserFrame } from "@/components/ui/BrowserFrame";
 import { bookingHref, mailtoHref } from "@/lib/navigation";
 
 export const metadata: Metadata = {
@@ -52,7 +53,7 @@ export default function CaseStudiesPage() {
         <article key={project.slug} className="px-4 pb-20">
           <div className="mx-auto max-w-[var(--container-page)]">
             <Reveal>
-              <div className="overflow-hidden rounded-panel">
+              <BrowserFrame url="teuta-apartment.com">
                 <PixelImage
                   src={project.cover}
                   alt={project.coverAlt}
@@ -61,7 +62,7 @@ export default function CaseStudiesPage() {
                   sizes="(max-width: 1200px) 100vw, 1200px"
                   className="w-full"
                 />
-              </div>
+              </BrowserFrame>
             </Reveal>
 
             <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-16">
@@ -153,27 +154,69 @@ export default function CaseStudiesPage() {
               </Reveal>
             </div>
 
-            {/* Stacked rather than a grid: these are wide screenshots at
-                differing aspect ratios, and a three-up row would shrink them
-                past the point of being readable. */}
-            <ul className="mt-14 flex flex-col gap-6">
-              {project.gallery.map((shot, index) => (
-                <li key={shot.src}>
-                  <Reveal delay={index * 60}>
-                    <figure className="overflow-hidden rounded-card shadow-glow">
-                      <PixelImage
-                        src={shot.src}
-                        alt={shot.alt}
-                        width={1200}
-                        height={640}
-                        sizes="(max-width: 1200px) 100vw, 1200px"
-                        className="w-full"
-                      />
-                    </figure>
-                  </Reveal>
-                </li>
-              ))}
-            </ul>
+            {/*
+              Alternating rows rather than a gallery: each screen is framed and
+              paired with the reasoning behind it, so the page explains the work
+              instead of just displaying it. The flip is lg-only, so on narrow
+              screens each screenshot stays directly above its own note.
+            */}
+            <section className="mt-20 lg:mt-28">
+              <Reveal>
+                <h3 className="font-display text-[clamp(1.75rem,3.2vw,2.25rem)] leading-[1.1] text-ink-black">
+                  {project.decisionsHeading}
+                </h3>
+              </Reveal>
+
+              <ol className="mt-12 flex flex-col gap-16 lg:mt-16 lg:gap-24">
+                {project.decisions.map((decision, index) => {
+                  const flipped = index % 2 === 1;
+
+                  return (
+                    <li key={decision.src}>
+                      <Reveal>
+                        {/* The column template mirrors along with the order, so
+                            the screenshot keeps the wider column on both sides.
+                            Flipping order alone would shrink it on every second
+                            row. */}
+                        <div
+                          className={[
+                            "grid items-center gap-8 lg:gap-14",
+                            flipped
+                              ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)]"
+                              : "lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]",
+                          ].join(" ")}
+                        >
+                          <div className={flipped ? "lg:order-2" : undefined}>
+                            <BrowserFrame>
+                              <PixelImage
+                                src={decision.src}
+                                alt={decision.alt}
+                                width={1200}
+                                height={640}
+                                sizes="(max-width: 1024px) 100vw, 660px"
+                                className="w-full"
+                              />
+                            </BrowserFrame>
+                          </div>
+
+                          <div className={flipped ? "lg:order-1" : undefined}>
+                            <p className="text-caption font-semibold uppercase tracking-[0.14em] text-signal-blue-text">
+                              {decision.screen}
+                            </p>
+
+                            <h4 className="mt-3 text-heading-sm font-semibold leading-snug text-ink-black">
+                              {decision.title}
+                            </h4>
+
+                            <p className="mt-4 text-body-sm text-smoke">{decision.why}</p>
+                          </div>
+                        </div>
+                      </Reveal>
+                    </li>
+                  );
+                })}
+              </ol>
+            </section>
           </div>
         </article>
       ))}

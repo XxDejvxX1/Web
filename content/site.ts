@@ -304,18 +304,32 @@ export const caseStudies = {
         attribution: "Placeholder attribution",
       },
 
-      gallery: [
+      /**
+       * Each screen, with the reasoning behind it. Rendered as alternating rows
+       * — framed screenshot one side, the decision on the other.
+       */
+      decisionsHeading: "Design decisions",
+      decisions: [
         {
           src: "/images/case-studies/teuta-gallery.webp",
           alt: "The gallery section, a wide carousel of apartment and beach photography",
+          screen: "Gallery",
+          title: "Show the place, not a list of amenities",
+          why: "Guests choose a rental on atmosphere, so the gallery runs wide and edge-to-edge instead of sitting in a tidy grid. Interior and beach shots are deliberately mixed in one sweep — the answer to 'what is it actually like there' should not require clicking through six thumbnails.",
         },
         {
           src: "/images/case-studies/teuta-availability.webp",
-          alt: "The availability calendar, with a four-night stay selected and priced",
+          alt: "The availability calendar with a four-night stay selected, a total price, and a WhatsApp button",
+          screen: "Availability",
+          title: "Answer the two blocking questions before asking for anything",
+          why: "The usual drop-off on a direct-booking site is not knowing whether the dates are free or what they cost. Two months sit side by side, the price totals as you pick, and the only next step is WhatsApp — where the owner already replies. No booking form, no account, nothing to abandon halfway.",
         },
         {
           src: "/images/case-studies/teuta-reviews.webp",
           alt: "The guest reviews carousel, headed 'What guests have said'",
+          screen: "Reviews",
+          title: "Rebuild the trust the marketplace used to supply",
+          why: "Leaving a platform means leaving its review count behind, which is most of what makes a stranger comfortable paying up front. Real guest reviews are given a section of their own with names, countries and scores kept intact, rather than being trimmed into anonymous pull quotes.",
         },
       ],
     },

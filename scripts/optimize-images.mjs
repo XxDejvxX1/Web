@@ -65,7 +65,7 @@ const ART = [
   { file: "TeutaHero.png", out: "case-studies/teuta-hero", width: 1600, quality: 86 },
   { file: "TeutaGallery.png", out: "case-studies/teuta-gallery", width: 1200, quality: 86 },
   { file: "TeutaReviews.png", out: "case-studies/teuta-reviews", width: 1200, quality: 86 },
-  { file: "TeutaAvailability.png", out: "case-studies/teuta-availability", width: 1040, quality: 86 },
+  { file: "TeutaAvailability.png", out: "case-studies/teuta-availability", width: 1200, quality: 86 },
 ];
 
 /**

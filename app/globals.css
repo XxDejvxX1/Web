@@ -293,87 +293,6 @@
     clip-path: none;
   }
 
-  /*
-   * Process: pinned horizontal scroller (motion.dev's scroll-pinning example,
-   * on a CSS scroll-progress timeline).
-   *
-   * The stacked layout below is the DEFAULT, not the fallback — it is what
-   * Firefox and reduced-motion users get, and it has to stand on its own. The
-   * pinning is layered on top only where scroll timelines exist.
-   */
-  .process-rail {
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
-    list-style: none;
-  }
-
-  .process-panel {
-    width: 100%;
-  }
-
-  .process-progress-track {
-    display: none;
-  }
-
-  @supports (animation-timeline: view()) {
-    /* One viewport of scroll per step. Keep in step with the panel count and
-       with the translate distance in @keyframes process-rail. */
-    .process-track {
-      position: relative;
-      height: 400svh;
-      view-timeline-name: --process-track;
-    }
-
-    .process-pin {
-      position: sticky;
-      top: 0;
-      display: flex;
-      height: 100svh;
-      flex-direction: column;
-      justify-content: center;
-      gap: clamp(2rem, 6vh, 4rem);
-      /* Clips the rail, which is four viewports wide. */
-      overflow: hidden;
-    }
-
-    .process-rail {
-      /*
-       * Panel count lives here and only here — the rail's width, each panel's
-       * width and the travel distance in @keyframes all derive from it.
-       *
-       * Percentages, not vw: 100vw includes the scrollbar but the pin does not,
-       * so vw panels sit ~15px wider than the header above them and the copy
-       * drifts out of alignment.
-       */
-      --panel-count: 4;
-      width: calc(var(--panel-count) * 100%);
-      flex-direction: row;
-      gap: 0;
-      animation: process-rail linear both;
-      animation-timeline: --process-track;
-      /* `contain` is exactly the sticky period: from the track's top meeting the
-         viewport's top, to its bottom meeting the viewport's bottom. */
-      animation-range: contain 0% contain 100%;
-    }
-
-    .process-panel {
-      width: calc(100% / var(--panel-count));
-      flex-shrink: 0;
-    }
-
-    .process-progress-track {
-      display: block;
-    }
-
-    .process-progress {
-      transform-origin: left center;
-      animation: process-progress linear both;
-      animation-timeline: --process-track;
-      animation-range: contain 0% contain 100%;
-    }
-  }
-
   /* Blinking caret trailing the typewriter text. */
   .typewriter-caret {
     display: inline-block;
@@ -389,30 +308,6 @@
 @keyframes caret-blink {
   to {
     visibility: hidden;
-  }
-}
-
-/*
- * Travel is (panels - 1) of the rail's own width divided by the panel count —
- * i.e. three panels' worth for four panels. --panel-count comes off .process-rail.
- */
-@keyframes process-rail {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(
-      calc(-100% * (var(--panel-count) - 1) / var(--panel-count))
-    );
-  }
-}
-
-@keyframes process-progress {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
   }
 }
 
@@ -447,36 +342,6 @@
   .scroll-reveal {
     animation: none !important;
     clip-path: none !important;
-  }
-
-  /*
-   * Unwind the process scroller completely. Killing only the animation would
-   * leave the rail parked on the first panel with the other three stranded
-   * off-screen, so the pinning has to come apart too.
-   */
-  .process-track {
-    height: auto !important;
-  }
-
-  .process-pin {
-    position: static !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
-
-  .process-rail {
-    flex-direction: column !important;
-    gap: 4rem !important;
-    animation: none !important;
-    transform: none !important;
-  }
-
-  .process-panel {
-    width: 100% !important;
-  }
-
-  .process-progress-track {
-    display: none !important;
   }
 
   *,
