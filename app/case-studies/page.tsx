@@ -180,10 +180,10 @@ export default function CaseStudiesPage() {
                             row. */}
                         <div
                           className={[
-                            "grid items-center gap-8 lg:gap-14",
+                            "grid items-center gap-8 lg:gap-10",
                             flipped
-                              ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)]"
-                              : "lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]",
+                              ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)]"
+                              : "lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)]",
                           ].join(" ")}
                         >
                           <div className={flipped ? "lg:order-2" : undefined}>
@@ -193,7 +193,7 @@ export default function CaseStudiesPage() {
                                 alt={decision.alt}
                                 width={1200}
                                 height={640}
-                                sizes="(max-width: 1024px) 100vw, 660px"
+                                sizes="(max-width: 1024px) 100vw, 800px"
                                 className="w-full"
                               />
                             </BrowserFrame>

@@ -53,13 +53,19 @@ const ART = [
   { file: "FavIcon.png", out: "brand-mark", width: 128, quality: 90 },
 
   /*
-   * Process steps. Square, rendered small beside their copy (~190px at most),
-   * so 420 is already 2x for retina.
+   * Process steps. Square, rendered small beside their copy, so 600 is already
+   * comfortably 2x.
+   *
+   * squareTrim matters here: the sources carry a wide transparent margin, so
+   * the robot filled maybe two thirds of its box. Beside a text column that
+   * reads as a much larger gap than the 40px actually set, and it wastes the
+   * size the artwork is given. Trimming the margin and re-padding to a square
+   * lets the art fill the box.
    */
-  { file: "ProcessDiscovery.png", out: "process/discovery", width: 420, quality: 88 },
-  { file: "ProcessDesign.png", out: "process/design", width: 420, quality: 88 },
-  { file: "ProcessBuild.png", out: "process/build", width: 420, quality: 88 },
-  { file: "ProcessLaunch.png", out: "process/launch", width: 420, quality: 88 },
+  { file: "ProcessDiscovery.png", out: "process/discovery", width: 600, quality: 88, squareTrim: true },
+  { file: "ProcessDesign.png", out: "process/design", width: 600, quality: 88, squareTrim: true },
+  { file: "ProcessBuild.png", out: "process/build", width: 600, quality: 88, squareTrim: true },
+  { file: "ProcessLaunch.png", out: "process/launch", width: 600, quality: 88, squareTrim: true },
 
   // Teuta Apartment case study — real screenshots of the live site.
   { file: "TeutaHero.png", out: "case-studies/teuta-hero", width: 1600, quality: 86 },
@@ -94,7 +100,7 @@ async function run() {
   let before = 0;
   let after = 0;
 
-  for (const { file, out, width, quality, crop } of ART) {
+  for (const { file, out, width, quality, crop, squareTrim } of ART) {
     const src = path.join(SRC, file);
     const dest = path.join(IMG_OUT, `${out}.webp`);
 
@@ -115,10 +121,21 @@ async function run() {
       });
     }
 
-    await pipeline
-      .resize({ width: target, kernel: "lanczos3", withoutEnlargement: true })
-      .webp({ quality, effort: 6 })
-      .toFile(dest);
+    if (squareTrim) {
+      // Drop the transparent margin, then letterbox back to a square on a
+      // transparent ground so the art fills as much of the box as it can.
+      pipeline.trim().resize({
+        width: target,
+        height: target,
+        fit: "contain",
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+        kernel: "lanczos3",
+      });
+    } else {
+      pipeline.resize({ width: target, kernel: "lanczos3", withoutEnlargement: true });
+    }
+
+    await pipeline.webp({ quality, effort: 6 }).toFile(dest);
 
     const srcSize = await sizeOf(src);
     const outSize = await sizeOf(dest);
