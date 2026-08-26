@@ -208,6 +208,34 @@
     transform: none;
   }
 
+  /*
+   * Scroll-linked curtain reveal (motion.dev's scroll image reveal effect,
+   * done on a CSS scroll-progress timeline).
+   *
+   * Two knobs:
+   *
+   *   animation-range — how much scrolling the reveal is spread across.
+   *     `cover 0%` is the moment the panel's top edge reaches the bottom of the
+   *     viewport; `cover 50%` would be the moment its centre reaches the centre
+   *     of the viewport. Running to 55% stretches it a little past that, so the panel is
+   *     still opening as it settles around the middle of the screen.
+   *
+   *   animation-timing-function — ease-in back-loads the movement. Linear looks
+   *     finished early, because the last stretch of a clip inset is a small
+   *     visual change; holding it narrower for longer means it reaches full
+   *     width right as the panel hits the middle, rather than well before.
+   *
+   * Unsupported (Firefox) falls through the @supports guard with no clip at
+   * all, so the panel is simply visible.
+   */
+  @supports (animation-timeline: view()) {
+    .scroll-reveal {
+      animation: scroll-reveal-open both ease-in;
+      animation-timeline: view();
+      animation-range: cover 0% cover 55%;
+    }
+  }
+
   /* Blinking caret trailing the typewriter text. */
   .typewriter-caret {
     display: inline-block;
@@ -223,6 +251,15 @@
 @keyframes caret-blink {
   to {
     visibility: hidden;
+  }
+}
+
+@keyframes scroll-reveal-open {
+  from {
+    clip-path: inset(0% 50% 0% 50% round var(--scroll-reveal-radius, 40px));
+  }
+  to {
+    clip-path: inset(0% 0% 0% 0% round var(--scroll-reveal-radius, 40px));
   }
 }
 
@@ -242,6 +279,12 @@
 
   .typewriter-caret {
     animation: none;
+  }
+
+  /* No curtain: show the panel outright. */
+  .scroll-reveal {
+    animation: none !important;
+    clip-path: none !important;
   }
 
   *,

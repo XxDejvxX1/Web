@@ -1,7 +1,4 @@
-"use client";
-
-import { useRef, type ReactNode } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import type { CSSProperties, ReactNode } from "react";
 
 type ScrollRevealProps = {
   children: ReactNode;
@@ -11,44 +8,27 @@ type ScrollRevealProps = {
 };
 
 /**
- * Scroll-linked curtain reveal, per motion.dev's scroll image reveal effect.
+ * Scroll-linked curtain reveal — the same clipPath effect as motion.dev's
+ * scroll image reveal, driven by a CSS scroll-progress timeline instead of a
+ * JS library. See `.scroll-reveal` in globals.css for the timing.
  *
- * clipPath opens from a closed centre line to the full box as the element
- * travels from entering the viewport to sitting at its middle. `round` is
- * carried in the inset so the panel keeps its rounded corners while opening —
- * a plain inset() would square them off mid-animation.
+ * No "use client" and no runtime: this stays a server component, and the whole
+ * effect costs nothing in JS.
  *
- * Without JS the inline clipPath would leave this closed, i.e. invisible, so
- * layout.tsx ships a <noscript> rule that forces `clip-path: none`.
+ * Firefox has not shipped scroll-driven animations, so the @supports guard
+ * leaves the panel simply visible there rather than animating it.
  */
 export function ScrollReveal({
   children,
   radius = 40,
   className = "",
 }: ScrollRevealProps) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "center center"],
-  });
-
-  const clipPath = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [
-      `inset(0% 50% 0% 50% round ${radius}px)`,
-      `inset(0% 0% 0% 0% round ${radius}px)`,
-    ]
-  );
-
   return (
-    <motion.div
-      ref={ref}
-      style={{ clipPath }}
+    <div
       className={["scroll-reveal", className].filter(Boolean).join(" ")}
+      style={{ "--scroll-reveal-radius": `${radius}px` } as CSSProperties}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

@@ -71,7 +71,9 @@ export default function RootLayout({
           Without this, a visitor with JS disabled would get a blank page.
         */}
         <noscript>
-          <style>{`.reveal, .notification-pop { opacity: 1 !important; transform: none !important; } .scroll-reveal { clip-path: none !important; }`}</style>
+          {/* .scroll-reveal needs no entry here — it is pure CSS and works
+              without JS on its own. */}
+          <style>{`.reveal, .notification-pop { opacity: 1 !important; transform: none !important; }`}</style>
         </noscript>
 
         <a
