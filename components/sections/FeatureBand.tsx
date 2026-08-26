@@ -67,9 +67,14 @@ export function FeatureBand() {
 
         <QuoteBubble quote={featureBand.quote} className="mt-16 max-w-sm" />
 
+        {/*
+          xl, not sm. The headline is max-w-2xl from the left padding and this
+          card is 300px off the right edge; below ~1200px those two overlap and
+          the card lands on top of the words. It only clears from 1280 up.
+        */}
         <NotificationCard
           {...featureBand.notification}
-          className="absolute right-6 top-6 hidden sm:flex lg:right-10 lg:top-10"
+          className="absolute right-10 top-10 hidden xl:flex"
         />
       </div>
     </section>

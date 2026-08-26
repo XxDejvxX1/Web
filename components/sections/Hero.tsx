@@ -13,16 +13,22 @@ import { PixelImage } from "@/components/ui/PixelImage";
 const CANVAS_FADE =
   "linear-gradient(to bottom," +
   "rgba(247,247,247,0) 0%," +
-  "rgba(247,247,247,0.06) 24%," +
-  "rgba(247,247,247,0.22) 44%," +
-  "rgba(247,247,247,0.48) 62%," +
-  "rgba(247,247,247,0.76) 78%," +
-  "rgba(247,247,247,0.95) 88%," +
-  // Solid well before the end, not exactly at it. Reaching 100% only on the
-  // final row leaves that row sampled at ~99.x%, and a fraction of a percent of
-  // the dark forest at the image's bottom edge is still visible against the
-  // near-white canvas — it reads as a thin leaking line.
-  "rgb(247,247,247) 96%," +
+  "rgba(247,247,247,0.07) 22%," +
+  "rgba(247,247,247,0.26) 42%," +
+  "rgba(247,247,247,0.52) 60%," +
+  "rgba(247,247,247,0.78) 74%," +
+  "rgba(247,247,247,0.94) 83%," +
+  /*
+   * Solid canvas from 88%, leaving roughly the last 45px of the fade as flat
+   * colour.
+   *
+   * Converging only at the very end was the bug: the gradient was still
+   * compositing ~3% of the artwork about 20px from the edge, which over a large
+   * flat area is a 3-6 value shift against #f7f7f7 — subtle on its own, but it
+   * meets pure canvas at the section boundary and the step reads as a hairline.
+   * The tail has to reach canvas well before the edge, not asymptotically at it.
+   */
+  "rgb(247,247,247) 88%," +
   "rgb(247,247,247) 100%)";
 
 export function Hero() {
@@ -106,7 +112,10 @@ export function Hero() {
             height={1024}
             priority
             sizes="(max-width: 1024px) 100vw, 1024px"
-            className="w-full drop-shadow-[0_30px_60px_-30px_rgba(0,0,0,0.45)]"
+            // Three values only — the CSS drop-shadow() filter takes no spread,
+            // and the fourth length silently voided the whole filter, so the
+            // mockup was rendering with no shadow at all.
+            className="w-full drop-shadow-[0_18px_34px_rgba(0,0,0,0.32)]"
           />
         </div>
       </div>
