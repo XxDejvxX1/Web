@@ -52,7 +52,7 @@ export const stats = [
 ] as const;
 
 export const howItWorks = {
-  heading: "How Uebi Works",
+  heading: "What we do",
   intro:
     "Four stages, one team. No handoffs to people you have never met, and no surprises at the end.",
 
@@ -118,7 +118,7 @@ export const featureBand = {
 } as const;
 
 export const services = {
-  heading: "Strategy, design and development — all under one roof",
+  heading: "Strategy, design and development",
   intro:
     "Most projects need all four. Take the whole thing, or just the part you are missing.",
 
@@ -162,12 +162,12 @@ export const services = {
 } as const;
 
 export const process = {
-  heading: "From first call to launch day",
+  heading: "How we do it",
 
   /**
-   * Rendered as a pinned horizontal scroller — one panel per step. Images are
-   * square and deliberately small, sitting beside their copy rather than
-   * dominating it.
+   * Rendered as alternating vertical rows — artwork one side, copy the other,
+   * flipping each step. Images are square and deliberately restrained so the
+   * text keeps equal weight.
    */
   steps: [
     {
@@ -356,8 +356,8 @@ export const footer = {
       title: "Explore",
       links: [
         { label: "Services", href: "/#services" },
-        { label: "How it works", href: "/#how-it-works" },
-        { label: "Process", href: "/#process" },
+        { label: "What we do", href: "/#how-it-works" },
+        { label: "How we do it", href: "/#process" },
         { label: "FAQ", href: "/#faq" },
       ],
     },
