@@ -236,6 +236,17 @@
     }
   }
 
+  /*
+   * Latched open. A scroll timeline is two-way by nature, so without this,
+   * scrolling back up would run the reveal in reverse and close the panel
+   * again. ScrollReveal.tsx sets this the moment the animation completes and
+   * never unsets it, so the panel opens exactly once.
+   */
+  .scroll-reveal[data-revealed] {
+    animation: none;
+    clip-path: none;
+  }
+
   /* Blinking caret trailing the typewriter text. */
   .typewriter-caret {
     display: inline-block;
