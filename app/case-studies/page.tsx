@@ -155,10 +155,12 @@ export default function CaseStudiesPage() {
             </div>
 
             {/*
-              Alternating rows rather than a gallery: each screen is framed and
-              paired with the reasoning behind it, so the page explains the work
-              instead of just displaying it. The flip is lg-only, so on narrow
-              screens each screenshot stays directly above its own note.
+              Reasoning above, screenshot full width below.
+              These are whole-page captures around 1900px wide. Beside a text
+              column they render at roughly 40% and everything inside them —
+              the calendar, the review cards — becomes unreadable. Width is what
+              makes them legible, so the copy sits above as a compact two-column
+              header and the screenshot takes the whole row.
             */}
             <section className="mt-20 lg:mt-28">
               <Reveal>
@@ -167,54 +169,48 @@ export default function CaseStudiesPage() {
                 </h3>
               </Reveal>
 
-              <ol className="mt-12 flex flex-col gap-16 lg:mt-16 lg:gap-24">
-                {project.decisions.map((decision, index) => {
-                  const flipped = index % 2 === 1;
-
-                  return (
-                    <li key={decision.src}>
-                      <Reveal>
-                        {/* The column template mirrors along with the order, so
-                            the screenshot keeps the wider column on both sides.
-                            Flipping order alone would shrink it on every second
-                            row. */}
-                        <div
-                          className={[
-                            "grid items-center gap-8 lg:gap-10",
-                            flipped
-                              ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)]"
-                              : "lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)]",
-                          ].join(" ")}
-                        >
-                          <div className={flipped ? "lg:order-2" : undefined}>
-                            <BrowserFrame>
-                              <PixelImage
-                                src={decision.src}
-                                alt={decision.alt}
-                                width={1200}
-                                height={640}
-                                sizes="(max-width: 1024px) 100vw, 800px"
-                                className="w-full"
-                              />
-                            </BrowserFrame>
-                          </div>
-
-                          <div className={flipped ? "lg:order-1" : undefined}>
-                            <p className="text-caption font-semibold uppercase tracking-[0.14em] text-signal-blue-text">
-                              {decision.screen}
-                            </p>
-
-                            <h4 className="mt-3 text-heading-sm font-semibold leading-snug text-ink-black">
-                              {decision.title}
-                            </h4>
-
-                            <p className="mt-4 text-body-sm text-smoke">{decision.why}</p>
-                          </div>
+              <ol className="mt-12 flex flex-col gap-16 lg:mt-14 lg:gap-24">
+                {project.decisions.map((decision, index) => (
+                  <li key={decision.src}>
+                    <Reveal>
+                      <div className="grid gap-4 border-t border-black/10 pt-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-12">
+                        <div className="flex items-baseline gap-3">
+                          <span
+                            className="font-display text-heading-sm leading-none text-signal-blue"
+                            aria-hidden="true"
+                          >
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          <p className="text-caption font-semibold uppercase tracking-[0.14em] text-signal-blue-text">
+                            {decision.screen}
+                          </p>
                         </div>
-                      </Reveal>
-                    </li>
-                  );
-                })}
+
+                        <div>
+                          <h4 className="text-heading-sm font-semibold leading-snug text-ink-black">
+                            {decision.title}
+                          </h4>
+                          <p className="mt-3 max-w-2xl text-body-sm text-smoke">
+                            {decision.why}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-8">
+                        <BrowserFrame>
+                          <PixelImage
+                            src={decision.src}
+                            alt={decision.alt}
+                            width={1600}
+                            height={640}
+                            sizes="(max-width: 1440px) 100vw, 1440px"
+                            className="w-full"
+                          />
+                        </BrowserFrame>
+                      </div>
+                    </Reveal>
+                  </li>
+                ))}
               </ol>
             </section>
           </div>

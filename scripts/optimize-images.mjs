@@ -69,9 +69,9 @@ const ART = [
 
   // Teuta Apartment case study — real screenshots of the live site.
   { file: "TeutaHero.png", out: "case-studies/teuta-hero", width: 1600, quality: 86 },
-  { file: "TeutaGallery.png", out: "case-studies/teuta-gallery", width: 1200, quality: 86 },
-  { file: "TeutaReviews.png", out: "case-studies/teuta-reviews", width: 1200, quality: 86 },
-  { file: "TeutaAvailability.png", out: "case-studies/teuta-availability", width: 1200, quality: 86 },
+  { file: "TeutaGallery.png", out: "case-studies/teuta-gallery", width: 1600, quality: 86 },
+  { file: "TeutaReviews.png", out: "case-studies/teuta-reviews", width: 1600, quality: 86 },
+  { file: "TeutaAvailability.png", out: "case-studies/teuta-availability", width: 1600, quality: 86 },
 ];
 
 /**
