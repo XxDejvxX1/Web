@@ -217,7 +217,7 @@
    * card opened. Higher specificity than the rule above, so it wins until
    * data-revealed appears, at which point the notification springs in.
    */
-  .scroll-reveal:not([data-revealed]) .notification-pop {
+  .scroll-reveal-track:not([data-revealed]) .notification-pop {
     opacity: 0;
     transform: translate3d(28px, -16px, 0) scale(0.94);
   }
@@ -234,10 +234,13 @@
    * The timeline is read from the track, not the card. The card is sticky, and
    * a view timeline on a pinned element stops advancing while it is stuck.
    *
-   * Range: the reveal starts as the card climbs into view and finishes a little
-   * way into the pinned stretch, so the last of the opening happens while the
-   * card is held still. Linear, and set explicitly — the animation shorthand
-   * would otherwise default to `ease`.
+   * The range end is tied to the pin rather than chosen by eye. The pin releases
+   * when the track's bottom reaches the viewport bottom, which on this timeline
+   * is track / (track + viewport) = 180 / 280 = 64%. Ending there means the card
+   * finishes opening at the exact moment it is freed, with no stretch of pinned
+   * scrolling left over doing nothing.
+   *
+   * Linear, and set explicitly — the animation shorthand defaults to `ease`.
    *
    * Unsupported (Firefox) falls through the @supports guard with no clip at
    * all, so the panel is simply visible.
@@ -260,17 +263,32 @@
     .scroll-reveal {
       animation: scroll-reveal-open both linear;
       animation-timeline: --uebi-card-track;
-      animation-range: cover 8% cover 50%;
+      animation-range: cover 8% cover 64%;
     }
   }
 
   /*
-   * Latched open. A scroll timeline is two-way by nature, so without this,
-   * scrolling back up would run the reveal in reverse and close the panel
-   * again. ScrollReveal.tsx sets this the moment the animation completes and
-   * never unsets it, so the panel opens exactly once.
+   * Revealed: the whole mechanism is dismantled.
+   *
+   * The animation goes — a scroll timeline is two-way, so it would otherwise
+   * run backwards and re-close the card on the way up — and the track collapses
+   * to its natural height so the pin stops existing at all. Leaving the pin in
+   * place meant scrolling back up through the card still cost an extra viewport
+   * of stuck scrolling for no reason.
+   *
+   * ScrollReveal.tsx corrects the scroll position for the removed height in the
+   * same frame, so the collapse itself is invisible.
    */
-  .scroll-reveal[data-revealed] {
+  .scroll-reveal-track[data-revealed] {
+    height: auto;
+  }
+
+  .scroll-reveal-track[data-revealed] .scroll-reveal-pin {
+    position: static;
+    height: auto;
+  }
+
+  .scroll-reveal-track[data-revealed] .scroll-reveal {
     animation: none;
     clip-path: none;
   }
