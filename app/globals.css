@@ -209,30 +209,58 @@
   }
 
   /*
+   * Hold the notification back until its card has actually opened.
+   *
+   * Its own observer fires on intersection, and a clipped card still
+   * intersects — so inside the pinned reveal it would play its arrival while
+   * the curtain was shut and be sitting there already landed by the time the
+   * card opened. Higher specificity than the rule above, so it wins until
+   * data-revealed appears, at which point the notification springs in.
+   */
+  .scroll-reveal:not([data-revealed]) .notification-pop {
+    opacity: 0;
+    transform: translate3d(28px, -16px, 0) scale(0.94);
+  }
+
+  /*
    * Scroll-linked curtain reveal (motion.dev's scroll image reveal effect,
    * done on a CSS scroll-progress timeline).
    *
-   * The reveal runs from the moment the panel's top edge reaches the bottom of
-   * the viewport (`cover 0%`) to the moment its centre reaches the centre of
-   * the viewport (`cover 50%`), and it runs linear.
+   * The track is 180svh, so 80svh of its height is scroll distance spent with
+   * the card pinned and stationary. That standing-still stretch is what makes
+   * the card feel heavy to scroll through; past the track, scrolling is normal
+   * again.
    *
-   * Both of those matter. Ending at 50% means the panel is at full width by the
-   * time it is properly in view, rather than sitting there still narrow; and
-   * linear keeps it opening steadily instead of holding narrow and rushing at
-   * the end. An earlier version pushed the end to 55% with ease-in, which left
-   * the card looking shrunken while it was front and centre.
+   * The timeline is read from the track, not the card. The card is sticky, and
+   * a view timeline on a pinned element stops advancing while it is stuck.
    *
-   * `linear` is set explicitly — the animation shorthand would otherwise
-   * default to `ease`.
+   * Range: the reveal starts as the card climbs into view and finishes a little
+   * way into the pinned stretch, so the last of the opening happens while the
+   * card is held still. Linear, and set explicitly — the animation shorthand
+   * would otherwise default to `ease`.
    *
    * Unsupported (Firefox) falls through the @supports guard with no clip at
    * all, so the panel is simply visible.
    */
+  .scroll-reveal-track {
+    position: relative;
+    height: 180svh;
+    view-timeline-name: --uebi-card-track;
+  }
+
+  .scroll-reveal-pin {
+    position: sticky;
+    top: 0;
+    display: flex;
+    height: 100svh;
+    align-items: center;
+  }
+
   @supports (animation-timeline: view()) {
     .scroll-reveal {
       animation: scroll-reveal-open both linear;
-      animation-timeline: view();
-      animation-range: cover 0% cover 50%;
+      animation-timeline: --uebi-card-track;
+      animation-range: cover 8% cover 50%;
     }
   }
 

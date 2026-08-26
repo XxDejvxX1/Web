@@ -20,8 +20,10 @@ export function FeatureBand() {
       {/* The whole panel is revealed, not just its artwork — the card should
           arrive as one object rather than have copy floating over an opening
           image. Radius matches rounded-panel so the corners survive the clip. */}
-      <ScrollReveal radius={40}>
-      <div className="relative isolate flex min-h-[88vh] flex-col justify-between overflow-hidden rounded-panel p-7 sm:p-12 lg:min-h-[92vh] lg:p-16">
+      <ScrollReveal radius={40} className="w-full">
+      {/* svh, not vh: the card sits inside a 100svh sticky pin, and vh units
+          would let it outgrow that pin on phones where the two differ. */}
+      <div className="relative isolate flex min-h-[84svh] flex-col justify-between overflow-hidden rounded-panel p-7 sm:p-12 lg:min-h-[88svh] lg:p-16">
         <PixelImage
           src="/images/card-background.webp"
           alt={featureBand.alt}

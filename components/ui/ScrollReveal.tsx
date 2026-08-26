@@ -10,19 +10,25 @@ type ScrollRevealProps = {
 };
 
 /**
- * Scroll-linked curtain reveal — the same clipPath effect as motion.dev's
- * scroll image reveal, driven by a CSS scroll-progress timeline (see
- * `.scroll-reveal` in globals.css).
+ * Pinned scroll reveal.
  *
- * This component exists only to latch it. A scroll-progress timeline maps
- * scroll position straight to animation progress, so it is inherently
- * two-way: scrolling back up runs the reveal in reverse and closes the panel
- * again. CSS has no way to remember that the animation already finished, so
- * the one-shot behaviour needs a flag.
+ * Three nested pieces:
  *
- * Once the panel is open it gets `data-revealed`, which drops the animation
- * entirely and leaves it plainly visible. From then on scrolling in either
- * direction does nothing to it.
+ *   track — taller than the viewport. Its extra height is pure scroll distance
+ *           and is what makes the card feel heavy to scroll past. It also
+ *           carries the view timeline, because the card itself is sticky and a
+ *           timeline read from a pinned element would stall.
+ *   pin   — sticky, one viewport tall, holding the card still while the track
+ *           scrolls underneath it.
+ *   card  — the clipped panel, opening as the track advances.
+ *
+ * Once the track is behind you, scrolling is ordinary again.
+ *
+ * The latch: a scroll-progress timeline maps position straight to progress, so
+ * it runs backwards on the way up and would re-close the panel. CSS cannot
+ * remember that an animation finished, so `data-revealed` is set on completion
+ * and never unset. It is driven off the computed clip rather than off geometry,
+ * which keeps it correct no matter how the range above is retuned.
  */
 export function ScrollReveal({
   children,
@@ -36,13 +42,6 @@ export function ScrollReveal({
     const el = ref.current;
     if (!el) return;
 
-    // Without scroll timelines there is no animation to latch — the @supports
-    // guard already leaves the panel visible.
-    if (typeof CSS === "undefined" || !CSS.supports("animation-timeline", "view()")) {
-      setRevealed(true);
-      return;
-    }
-
     let frame = 0;
 
     const stop = () => {
@@ -54,15 +53,15 @@ export function ScrollReveal({
 
     const check = () => {
       frame = 0;
-      const rect = el.getBoundingClientRect();
 
       /*
-       * The CSS range ends at `cover 50%`, which is exactly the point where the
-       * panel's centre meets the viewport's centre. The 6px is slack so the
-       * latch can only ever land at or after the animation finishes — latching
-       * a moment early would snap the last sliver open.
+       * Read how open the clip actually is. Mid-reveal computes to
+       * `inset(0% 32% round 40px)`; fully open drops the second value entirely,
+       * and an unsupported browser reports `none`. Either of those means done.
        */
-      if (rect.top + rect.height / 2 <= window.innerHeight / 2 - 6) {
+      const match = getComputedStyle(el).clipPath.match(/inset\(0%\s+([\d.]+)%/);
+
+      if (!match || Number.parseFloat(match[1]) <= 0.5) {
         setRevealed(true);
         stop();
       }
@@ -72,7 +71,7 @@ export function ScrollReveal({
       if (!frame) frame = requestAnimationFrame(check);
     };
 
-    // Covers loading already scrolled past the panel.
+    // Covers loading already scrolled past the card.
     check();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
@@ -81,13 +80,17 @@ export function ScrollReveal({
   }, []);
 
   return (
-    <div
-      ref={ref}
-      data-revealed={revealed ? "true" : undefined}
-      className={["scroll-reveal", className].filter(Boolean).join(" ")}
-      style={{ "--scroll-reveal-radius": `${radius}px` } as CSSProperties}
-    >
-      {children}
+    <div className="scroll-reveal-track">
+      <div className="scroll-reveal-pin">
+        <div
+          ref={ref}
+          data-revealed={revealed ? "true" : undefined}
+          className={["scroll-reveal", className].filter(Boolean).join(" ")}
+          style={{ "--scroll-reveal-radius": `${radius}px` } as CSSProperties}
+        >
+          {children}
+        </div>
+      </div>
     </div>
   );
 }
