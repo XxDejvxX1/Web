@@ -49,6 +49,21 @@ const ART = [
   { file: "Grid1.png", out: "grid-1", width: 800, quality: 88 },
   { file: "Grid2.png", out: "grid-2", width: 800, quality: 88 },
   { file: "Grid3.png", out: "grid-3", width: 800, quality: 88 },
+
+  /*
+   * Poster frames for the bento clips, pulled out of the .mp4s themselves.
+   *
+   * They have to come from the clips rather than from the old Grid*.png art:
+   * the clips are H.264 on baked-in black, so the previous transparent
+   * illustrations sat inside the black panel with their warm pastel aura
+   * glowing against it, and then snapped to a grey wireframe the moment
+   * playback began. A real frame makes the poster, the reduced-motion still
+   * and the first frame of the animation all the same picture.
+   */
+  { file: "motion/frames/strategy.png", out: "motion/strategy", width: 600, quality: 88 },
+  { file: "motion/frames/interfaces.png", out: "motion/interfaces", width: 600, quality: 88 },
+  { file: "motion/frames/code.png", out: "motion/code", width: 600, quality: 88 },
+  { file: "motion/frames/care.png", out: "motion/care", width: 600, quality: 88 },
   // Brand mark for the nav capsule and footer.
   { file: "FavIcon.png", out: "brand-mark", width: 128, quality: 90 },
 

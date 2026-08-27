@@ -1,5 +1,6 @@
 import { howItWorks } from "@/content/site";
 import { Icon, type IconName } from "@/components/ui/Icons";
+import { MotionGraphic } from "@/components/ui/MotionGraphic";
 import { PixelImage } from "@/components/ui/PixelImage";
 import { Reveal } from "@/components/ui/Reveal";
 
@@ -19,6 +20,69 @@ const GLOW =
 
 const cardShell =
   "relative flex flex-col overflow-hidden rounded-card bg-paper-white shadow-glow";
+
+/**
+ * `video` is optional so a card can be moved to motion on its own. The still is
+ * never dropped when it is: it doubles as the clip's poster, which is what
+ * reduced-motion and no-JS visitors keep.
+ */
+type CardArtwork = {
+  image: string;
+  alt: string;
+  video?: string;
+};
+
+/** Centres the artwork in its slot at whatever ratio it was authored at. */
+const media = "absolute inset-0 m-auto max-h-full w-auto max-w-full object-contain";
+
+/**
+ * The artwork slot: the soft GLOW wash, and whichever medium sits on it.
+ *
+ * Both media are transparent, so the backdrop is the same either way. The clips
+ * arrive as H.264, which cannot carry alpha, and `npm run video` keys the black
+ * they were flattened onto back out into a WebM — see scripts/optimize-video.mjs
+ * for why that is a colour key rather than a luma matte.
+ */
+function CardArt({
+  card,
+  width,
+  height,
+  sizes,
+}: {
+  card: CardArtwork;
+  width: number;
+  height: number;
+  sizes: string;
+}) {
+  return (
+    <>
+      <div
+        className="absolute inset-0 rounded-[20px]"
+        style={{ background: GLOW }}
+        aria-hidden="true"
+      />
+      {card.video ? (
+        <MotionGraphic
+          src={card.video}
+          poster={card.image}
+          alt={card.alt}
+          width={width}
+          height={height}
+          className={media}
+        />
+      ) : (
+        <PixelImage
+          src={card.image}
+          alt={card.alt}
+          width={width}
+          height={height}
+          sizes={sizes}
+          className={media}
+        />
+      )}
+    </>
+  );
+}
 
 function CardHeader({
   icon,
@@ -64,18 +128,11 @@ export function HowItWorks() {
               <CardHeader icon={feature.icon} title={feature.title} body={feature.body} />
 
               <div className="relative mt-8 min-h-[300px] flex-1">
-                <div
-                  className="absolute inset-0 rounded-[20px]"
-                  style={{ background: GLOW }}
-                  aria-hidden="true"
-                />
-                <PixelImage
-                  src={feature.image}
-                  alt={feature.alt}
+                <CardArt
+                  card={feature}
                   width={720}
                   height={1440}
                   sizes="(max-width: 1024px) 90vw, 340px"
-                  className="absolute inset-0 m-auto max-h-full w-auto max-w-full object-contain"
                 />
               </div>
             </article>
@@ -91,18 +148,11 @@ export function HowItWorks() {
                 </div>
 
                 <div className="relative h-40 shrink-0 sm:h-44 sm:w-[38%]">
-                  <div
-                    className="absolute inset-0 rounded-[20px]"
-                    style={{ background: GLOW }}
-                    aria-hidden="true"
-                  />
-                  <PixelImage
-                    src={card.image}
-                    alt={card.alt}
+                  <CardArt
+                    card={card}
                     width={800}
                     height={800}
                     sizes="(max-width: 640px) 60vw, 300px"
-                    className="absolute inset-0 m-auto max-h-full w-auto max-w-full object-contain"
                   />
                 </div>
               </article>
