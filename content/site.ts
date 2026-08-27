@@ -122,28 +122,14 @@ export const featureBand = {
 } as const;
 
 export const services = {
-  heading: "Strategy, design and development",
+  /*
+   * This section used to restate the four disciplines that the "What we do"
+   * bento already covers, in different words. It now carries only what that
+   * section does not: the concrete deliverables list and the stack.
+   */
+  heading: "What you actually get",
   intro:
-    "Most projects need all four. Take the whole thing, or just the part you are missing.",
-
-  disciplines: [
-    {
-      title: "Product Strategy",
-      body: "Positioning, scope and a realistic plan. We work out what the site needs to do before deciding what it looks like.",
-    },
-    {
-      title: "UI / UX Design",
-      body: "Wireframes through to a complete, responsive design system — built in the browser, not just in Figma.",
-    },
-    {
-      title: "Frontend Development",
-      body: "Fast, accessible, standards-based interfaces. Semantic markup, real keyboard support and no layout surprises.",
-    },
-    {
-      title: "Backend Development",
-      body: "APIs, databases, auth and integrations. Sensible architecture that will not need rewriting in a year.",
-    },
-  ],
+    "The same deliverables on every project, and the stack we build them on.",
 
   deliverables: [
     "Custom Website",
@@ -202,7 +188,6 @@ export const process = {
 } as const;
 
 export const faq = {
-  eyebrow: "FAQ",
   heading: "Questions worth asking",
   items: [
     {
@@ -239,8 +224,24 @@ export const finalCta = {
   secondaryCta: { label: "Book a Call", href: "/contact/" },
 } as const;
 
+/**
+ * Homepage proof panel.
+ *
+ * The homepage previously asserted craft for nine screens and never showed any,
+ * while its hero centrepiece was an illustration of a site that does not exist.
+ * This pulls the one real shipped project forward.
+ *
+ * It deliberately takes only the screenshot, the summary and the services from
+ * `caseStudies` — never `results` or `testimonial`, which are still invented.
+ */
+export const selectedWork = {
+  heading: "Recent work",
+  intro:
+    "One project, shown as it actually shipped. No mockups, no invented numbers.",
+  cta: { label: "See the case study", href: "/case-studies/" },
+} as const;
+
 export const contact = {
-  eyebrow: "Contact",
   heading: "Let's talk about your project",
   intro:
     "Tell us what you are building and we will come back within one business day with honest thoughts, a rough timeline and a price range.",
@@ -266,7 +267,6 @@ export const contact = {
  * with real numbers, or removed.
  */
 export const caseStudies = {
-  eyebrow: "Case studies",
   heading: "Selected work",
   intro:
     "A closer look at what we build, who it is for, and what changed once it shipped.",

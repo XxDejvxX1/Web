@@ -3,16 +3,16 @@ import { PixelImage } from "@/components/ui/PixelImage";
 import { Reveal } from "@/components/ui/Reveal";
 
 /**
- * Alternating vertical rows, following the reference layout: artwork on one
- * side, a short text block on the other, flipping sides each step.
+ * Four steps as one band.
  *
- * The flip is done with `order` at lg and above only. Below that everything
- * stacks in source order, so each visual sits above its own copy rather than
- * next to the previous step's.
+ * This was four full-width alternating rows with 288px artwork, which ran to
+ * roughly 1800px — two full screens to say "discovery, design, build, launch".
+ * That length was most of why the page read as repetitive: by the time a
+ * visitor arrived here they had already been told what we do twice.
  *
- * The artwork is square and capped well below its column width — these rows are
- * a heading and a paragraph with a picture beside them, not a picture with a
- * caption.
+ * As a single row the sequence is legible at a glance, which is all a process
+ * list needs to do. The artwork shrinks to a token rather than an illustration,
+ * because at this size it identifies the step instead of depicting it.
  */
 export function Process() {
   return (
@@ -24,69 +24,36 @@ export function Process() {
           </h2>
         </Reveal>
 
-        <ol className="mt-16 flex flex-col gap-16 lg:mt-20 lg:gap-24">
-          {process.steps.map((step, index) => {
-            const flipped = index % 2 === 1;
+        <ol className="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:mt-16 lg:grid-cols-4 lg:gap-x-8">
+          {process.steps.map((step, index) => (
+            <Reveal key={step.title} delay={index * 70}>
+              <li className="flex h-full flex-col">
+                <PixelImage
+                  src={step.image}
+                  alt={step.alt}
+                  width={420}
+                  height={420}
+                  sizes="(max-width: 640px) 30vw, 120px"
+                  className="size-20 shrink-0 sm:size-24"
+                />
 
-            return (
-              <li key={step.title}>
-                <Reveal>
-                  {/*
-                    Full-width alternating rows, but each pair is pulled in
-                    towards the centre gutter rather than centred in its own
-                    half. Left to itself, a two-column grid parks the artwork in
-                    the middle of its side and leaves a wide dead space before
-                    the copy.
-                  */}
-                  <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-10">
-                    <div
-                      className={[
-                        "flex justify-center",
-                        flipped ? "lg:order-2 lg:justify-start" : "lg:justify-end",
-                      ].join(" ")}
-                    >
-                      <PixelImage
-                        src={step.image}
-                        alt={step.alt}
-                        width={420}
-                        height={420}
-                        sizes="(max-width: 1024px) 60vw, 288px"
-                        className="size-44 shrink-0 sm:size-56 lg:size-72"
-                      />
-                    </div>
+                <span
+                  className="mt-5 font-display text-heading-sm leading-none text-signal-blue"
+                  aria-hidden="true"
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
 
-                    {/* Held narrow on purpose: the copy reads as an upright
-                        column beside the artwork rather than a wide slab. On
-                        flipped rows ml-auto pushes it against the gutter so the
-                        pair stays tight on both sides. */}
-                    <div
-                      className={[
-                        "max-w-[22rem]",
-                        flipped ? "lg:order-1 lg:ml-auto" : undefined,
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
-                    >
-                      <span
-                        className="font-display text-heading leading-none text-signal-blue"
-                        aria-hidden="true"
-                      >
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
+                {/* Inter, not the display serif: DESIGN.md keeps the serif to
+                    36px and up, and these sit well below it. */}
+                <h3 className="mt-2.5 text-heading-sm font-semibold leading-[1.25] tracking-[-0.02em] text-ink-black">
+                  {step.title}
+                </h3>
 
-                      {/* Inter, not the display serif: these sit at 22-28px and
-                          DESIGN.md keeps the serif to 36px and up. */}
-                      <h3 className="mt-4 text-[clamp(1.375rem,2.2vw,1.75rem)] font-semibold leading-[1.2] tracking-[-0.02em] text-ink-black">
-                        {step.title}
-                      </h3>
-
-                      <p className="mt-3 text-body text-smoke">{step.body}</p>
-                    </div>
-                  </div>
-                </Reveal>
+                <p className="mt-2.5 text-body-sm text-smoke">{step.body}</p>
               </li>
-            );
-          })}
+            </Reveal>
+          ))}
         </ol>
       </div>
     </section>

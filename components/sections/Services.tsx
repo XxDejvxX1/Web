@@ -3,6 +3,15 @@ import { Icon } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
 import { TechLogo } from "@/components/ui/TechLogos";
 
+/**
+ * Deliverables and stack — the two things "What we do" does not already say.
+ *
+ * This section previously opened with four discipline cards (Product Strategy,
+ * UI/UX, Frontend, Backend) that restated the bento above it almost line for
+ * line. Between them and the Process steps, the page sold the same four
+ * services three separate times. The cards are gone; these two panels are what
+ * was actually load-bearing.
+ */
 export function Services() {
   return (
     <section id="services" className="px-4 py-24 sm:py-28 lg:py-32">
@@ -14,24 +23,11 @@ export function Services() {
           <p className="mt-5 max-w-xl text-body text-smoke">{services.intro}</p>
         </Reveal>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2">
-          {services.disciplines.map((discipline, index) => (
-            <Reveal key={discipline.title} delay={index * 70}>
-              <article className="h-full rounded-card bg-paper-white p-7 shadow-glow">
-                <h3 className="text-heading-sm font-semibold text-ink-black">
-                  {discipline.title}
-                </h3>
-                <p className="mt-3 text-body-sm text-smoke">{discipline.body}</p>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-
         <Reveal>
-          <div className="mt-5 grid gap-5 lg:grid-cols-2">
+          <div className="mt-14 grid gap-5 lg:grid-cols-2">
             <div className="rounded-card bg-paper-white p-7 shadow-glow">
               <h3 className="text-caption font-semibold uppercase tracking-[0.12em] text-ink-black">
-                What you get
+                Deliverables
               </h3>
               <ul className="mt-5 flex flex-col gap-3.5">
                 {services.deliverables.map((item) => (

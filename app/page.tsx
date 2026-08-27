@@ -4,6 +4,7 @@ import { HowItWorks } from "@/components/sections/HowItWorks";
 import { Services } from "@/components/sections/Services";
 import { FeatureBand } from "@/components/sections/FeatureBand";
 import { Process } from "@/components/sections/Process";
+import { SelectedWork } from "@/components/sections/SelectedWork";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
 
@@ -21,6 +22,7 @@ export default function HomePage() {
       <Services />
       <FeatureBand />
       <Process />
+      <SelectedWork />
       <Faq />
       <FinalCta />
     </>

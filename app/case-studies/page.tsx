@@ -26,11 +26,7 @@ export default function CaseStudiesPage() {
       <section className="px-4 pb-16 pt-36 sm:pt-44">
         <div className="mx-auto max-w-[var(--container-page)]">
           <Reveal>
-            <p className="text-caption font-semibold uppercase tracking-[0.14em] text-signal-blue-text">
-              {caseStudies.eyebrow}
-            </p>
-
-            <h1 className="mt-4 max-w-2xl font-display text-[clamp(2.5rem,5.5vw,3.5rem)] leading-[1.03] text-ink-black">
+            <h1 className="max-w-2xl font-display text-[clamp(2.5rem,5.5vw,3.5rem)] leading-[1.03] text-ink-black">
               {caseStudies.heading}
             </h1>
 

@@ -16,6 +16,20 @@ import { PixelImage } from "@/components/ui/PixelImage";
  * must be opaque (otherwise the footer shows through the whole page) and must
  * sit above this in the stacking order.
  */
+/*
+ * Footer links measured 17px tall. The panel is a fixed 300-340px reveal, so
+ * they cannot all become 44px without growing it and changing the reveal's
+ * proportions. Two techniques instead:
+ *
+ *   - Horizontal rows (socials) take the same invisible 44px ::before box the
+ *     nav uses; vertical growth cannot overlap a side-by-side sibling.
+ *   - Vertical lists trade their `gap` for equivalent padding on the link. The
+ *     spacing between text is identical, but the whitespace is now inside the
+ *     tap target rather than dead between them.
+ */
+const HIT_AREA =
+  "relative before:absolute before:inset-x-0 before:top-1/2 before:h-11 before:-translate-y-1/2 before:content-['']";
+
 export function Footer() {
   const year = new Date().getFullYear();
   const socials = site.socials.filter((social) => social.href);
@@ -62,7 +76,7 @@ export function Footer() {
           <div className="max-w-xs">
             <Link
               href="/"
-              className="flex items-center gap-2.5"
+              className={`flex items-center gap-2.5 ${HIT_AREA}`}
               aria-label={`${site.name} — home`}
             >
               <img
@@ -79,7 +93,7 @@ export function Footer() {
 
             <a
               href={mailtoHref()}
-              className="mt-3 inline-block text-body-sm font-medium text-paper-white/90 underline-offset-4 hover:text-paper-white hover:underline"
+              className="mt-2 inline-block py-1 text-body-sm font-medium text-paper-white/90 underline-offset-4 hover:text-paper-white hover:underline"
             >
               {site.email}
             </a>
@@ -90,12 +104,12 @@ export function Footer() {
             shortened panel and clips the brand off the top. Below sm the links
             flatten into one wrapping row instead.
           */}
-          <ul className="flex flex-wrap gap-x-5 gap-y-2 sm:hidden">
+          <ul className="flex flex-wrap gap-x-5 sm:hidden">
             {flatLinks.map((link) => (
               <li key={`flat-${link.label}`}>
                 <Link
                   href={link.href}
-                  className="text-body-sm text-paper-white/85 transition-colors hover:text-paper-white"
+                  className="block py-1 text-body-sm text-paper-white/85 transition-colors hover:text-paper-white"
                 >
                   {link.label}
                 </Link>
@@ -111,12 +125,12 @@ export function Footer() {
                 <h3 className="text-caption font-semibold uppercase tracking-[0.12em] text-paper-white/70">
                   {column.title}
                 </h3>
-                <ul className="mt-3 flex flex-col gap-2">
+                <ul className="mt-2 flex flex-col">
                   {column.links.map((link) => (
                     <li key={`${column.title}-${link.label}`}>
                       <Link
                         href={link.href}
-                        className="text-body-sm text-paper-white/85 transition-colors hover:text-paper-white"
+                        className="block py-1 text-body-sm text-paper-white/85 transition-colors hover:text-paper-white"
                       >
                         {link.label}
                       </Link>
@@ -141,7 +155,7 @@ export function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-caption text-paper-white/70 transition-colors hover:text-paper-white"
+                    className={`${HIT_AREA} text-caption text-paper-white/70 transition-colors hover:text-paper-white`}
                   >
                     {social.label}
                   </a>

@@ -134,6 +134,23 @@
     text-wrap: pretty;
   }
 
+  /*
+   * Surfaces the browser draws for us. Left at their defaults these belong to
+   * no design system — a grey caret and a grey scrollbar on a page that
+   * otherwise commits to one blue. Standard properties only; no -webkit
+   * scrollbar pseudo-elements, which would style Chrome and leave Firefox out.
+   */
+  html {
+    scrollbar-color: color-mix(in srgb, var(--color-smoke) 45%, transparent)
+      var(--color-ash-mist);
+  }
+
+  input,
+  textarea,
+  [contenteditable] {
+    caret-color: var(--color-signal-blue);
+  }
+
   :focus-visible {
     outline: 2px solid var(--color-signal-blue);
     outline-offset: 3px;
@@ -200,7 +217,7 @@
     transform: translate3d(28px, -16px, 0) scale(0.94);
     transition:
       opacity 520ms cubic-bezier(0.16, 1, 0.3, 1) 420ms,
-      transform 640ms cubic-bezier(0.34, 1.56, 0.64, 1) 420ms;
+      transform 640ms cubic-bezier(0.16, 1, 0.3, 1) 420ms;
   }
 
   .notification-pop[data-arrived="true"] {

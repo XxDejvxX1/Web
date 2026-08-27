@@ -11,6 +11,16 @@ import { site } from "@/content/site";
  */
 const LIGHT_NAV_ROUTES = ["/"];
 
+/*
+ * Every nav target measured 31.5px tall on mobile, well under the 44px minimum
+ * for a comfortable tap. Rather than pad the pills — which would repaint the
+ * active pill noticeably taller — this stretches an invisible ::before box to
+ * 44px, centred on the link. The painted pill is unchanged; only the hit area
+ * grows. Siblings sit side by side, so the vertical growth never overlaps them.
+ */
+const HIT_AREA =
+  "relative before:absolute before:inset-x-0 before:top-1/2 before:h-11 before:-translate-y-1/2 before:content-['']";
+
 const tones = {
   light: {
     brand: "text-paper-white",
@@ -39,7 +49,7 @@ export function Nav() {
       <div className="mx-auto flex max-w-[var(--container-page)] items-center justify-between gap-4">
         <Link
           href="/"
-          className="flex items-center gap-2.5 rounded-xl"
+          className={`flex items-center gap-2.5 rounded-xl ${HIT_AREA}`}
           aria-label={`${site.name} — home`}
         >
           <img
@@ -69,6 +79,7 @@ export function Nav() {
                 aria-current={isCurrent ? "page" : undefined}
                 className={[
                   "rounded-pill px-2.5 py-1.5 text-[13px] font-medium whitespace-nowrap transition-colors duration-200 sm:px-4 sm:text-body-sm",
+                  HIT_AREA,
                   isCurrent ? tone.active : tone.link,
                 ].join(" ")}
               >
