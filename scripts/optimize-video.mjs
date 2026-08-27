@@ -63,7 +63,21 @@ const KEY = "colorkey=0x000000:0.01:0.02";
 const WIDTH = 480;
 
 const CLIPS = [
-  { file: "StrategyAndDesign.mp4", out: "strategy", poster: 6.0 },
+  /*
+   * `drop` removes a span of source time before keying.
+   *
+   * StrategyAndDesign crossfades between two scenes at 7.20-7.36s, and a
+   * crossfade on a black ground passes through dark grey — 55% of the frame
+   * sits at luma 9-60 for those five frames. The key cannot touch that, because
+   * it is not the black it was told to remove, so the card fills with a dark
+   * rectangle mid-loop. Measured on the source, before any encoding: the other
+   * three clips never exceed 5% dark and need no cut.
+   *
+   * Cutting the crossfade turns it into a straight cut. That is a real loss,
+   * but a 0.17s cut reads far better than a black slab, and only a re-export
+   * without the fade fixes it properly.
+   */
+  { file: "StrategyAndDesign.mp4", out: "strategy", poster: 6.0, drop: [7.19, 7.37] },
   { file: "PixelPerfectInterfaces.mp4", out: "interfaces", poster: 4.0 },
   { file: "ModernPerformantCode.mp4", out: "code", poster: 2.0 },
   { file: "LaunchAndOngoingCare.mp4", out: "care", poster: 6.0 },
@@ -102,7 +116,7 @@ async function main() {
   let before = 0;
   let after = 0;
 
-  for (const { file, out, poster } of CLIPS) {
+  for (const { file, out, poster, drop } of CLIPS) {
     if (!present.has(file)) {
       console.warn(`skipping ${out}: ${path.join(SRC, file)} not found`);
       continue;
@@ -116,10 +130,24 @@ async function main() {
     // number, which yuv420p chroma subsampling requires.
     const chain = `${KEY},scale=${WIDTH}:-2`;
 
+    /*
+     * A dropped span is stitched out with trim/concat before the key runs, so
+     * the keyed output never contains the frames at all. setpts rebases each
+     * segment, otherwise concat inherits the original timestamps and the join
+     * stalls for the length of the gap.
+     */
+    const videoFilter = drop
+      ? `[0:v]trim=0:${drop[0]},setpts=PTS-STARTPTS[a];` +
+        `[0:v]trim=start=${drop[1]},setpts=PTS-STARTPTS[b];` +
+        `[a][b]concat=n=2:v=1[j];[j]${chain},format=yuva420p[v]`
+      : null;
+
     run([
       "-hide_banner", "-loglevel", "error", "-y",
       "-i", src,
-      "-vf", `${chain},format=yuva420p`,
+      ...(videoFilter
+        ? ["-filter_complex", videoFilter, "-map", "[v]"]
+        : ["-vf", `${chain},format=yuva420p`]),
       "-c:v", "libvpx-vp9",
       "-pix_fmt", "yuva420p",
       "-auto-alt-ref", "0",
