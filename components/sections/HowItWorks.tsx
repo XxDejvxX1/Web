@@ -115,7 +115,6 @@ export function HowItWorks() {
           <h2 className="max-w-2xl font-display text-[clamp(2.25rem,4.5vw,3rem)] leading-[1.05] text-ink-black">
             {howItWorks.heading}
           </h2>
-          <p className="mt-5 max-w-xl text-body text-smoke">{howItWorks.intro}</p>
         </Reveal>
 
         {/*

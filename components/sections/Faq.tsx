@@ -22,7 +22,7 @@ export function Faq() {
               <details
                 key={item.q}
                 name="faq"
-                className="group rounded-card bg-paper-white px-6 shadow-glow"
+                className="faq-item group rounded-card bg-paper-white px-6 shadow-glow"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-body font-medium text-ink-black [&::-webkit-details-marker]:hidden">
                   {item.q}

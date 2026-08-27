@@ -337,6 +337,36 @@
   }
 }
 
+/*
+ * FAQ answers slide open instead of snapping.
+ *
+ * Done entirely in CSS against the native <details> element, so the accordion
+ * keeps its keyboard support, its screen-reader semantics and in-page find, and
+ * still ships no JavaScript. `interpolate-size` is what makes a transition to
+ * the intrinsic `auto` height legal; `content-visibility` has to ride along
+ * with `allow-discrete` or the content pops in at the start of the close.
+ *
+ * Browsers without ::details-content simply open instantly, which is exactly
+ * the behaviour that shipped before this.
+ */
+@supports (interpolate-size: allow-keywords) {
+  :root {
+    interpolate-size: allow-keywords;
+  }
+}
+
+details.faq-item::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition:
+    block-size 340ms cubic-bezier(0.16, 1, 0.3, 1),
+    content-visibility 340ms allow-discrete;
+}
+
+details.faq-item[open]::details-content {
+  block-size: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -353,6 +383,10 @@
 
   .typewriter-caret {
     animation: none;
+  }
+
+  details.faq-item::details-content {
+    transition: none;
   }
 
   /* No curtain: show the panel outright. */

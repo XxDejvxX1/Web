@@ -53,8 +53,6 @@ export const stats = [
 
 export const howItWorks = {
   heading: "What we do",
-  intro:
-    "Four stages, one team. No handoffs to people you have never met, and no surprises at the end.",
 
   /**
    * The first card renders tall down the left column; the rest stack on the
@@ -128,8 +126,6 @@ export const services = {
    * section does not: the concrete deliverables list and the stack.
    */
   heading: "What you actually get",
-  intro:
-    "The same deliverables on every project, and the stack we build them on.",
 
   deliverables: [
     "Custom Website",
@@ -188,7 +184,7 @@ export const process = {
 } as const;
 
 export const faq = {
-  heading: "Questions worth asking",
+  heading: "FAQ",
   items: [
     {
       q: "How long does a project take?",
@@ -236,8 +232,6 @@ export const finalCta = {
  */
 export const selectedWork = {
   heading: "Recent work",
-  intro:
-    "One project, shown as it actually shipped. No mockups, no invented numbers.",
   cta: { label: "See the case study", href: "/case-studies/" },
 } as const;
 
@@ -270,9 +264,6 @@ export const caseStudies = {
   heading: "Selected work",
   intro:
     "A closer look at what we build, who it is for, and what changed once it shipped.",
-
-  placeholderNotice:
-    "The results figures and the quote below are placeholders, not real numbers. Everything else is the live site.",
 
   projects: [
     {

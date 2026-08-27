@@ -92,9 +92,15 @@ export default function RootLayout({
         {/* min-h-screen matters on short routes: without it the wrapper stops
             above the fold and the pinned footer shows through before the
             visitor has scrolled anywhere. */}
-        <div className="relative z-10 mb-[var(--footer-height)] min-h-screen bg-ash-mist">
+        <div className="relative z-10 mb-[var(--footer-height)] flex min-h-screen flex-col bg-ash-mist">
           <Nav />
-          <main id="main">{children}</main>
+          {/* flex-1 pushes EdgeLines to the bottom of the wrapper. Without it a
+              short route leaves the closing hairlines floating mid-screen with
+              dead canvas beneath them. Nav is absolute, so it stays out of the
+              flex flow. */}
+          <main id="main" className="flex-1">
+            {children}
+          </main>
           <EdgeLines />
         </div>
 

@@ -20,7 +20,6 @@ export function Services() {
           <h2 className="max-w-3xl font-display text-[clamp(2.25rem,4.5vw,3rem)] leading-[1.05] text-ink-black">
             {services.heading}
           </h2>
-          <p className="mt-5 max-w-xl text-body text-smoke">{services.intro}</p>
         </Reveal>
 
         <Reveal>
@@ -43,12 +42,15 @@ export function Services() {
               </ul>
             </div>
 
-            <div className="rounded-card bg-paper-white p-7 shadow-glow">
+            {/* Deliberately not a card. The deliverables are one list and read
+                as a single panel; the stack is a set of discrete things, so each
+                one is its own small square sitting on the canvas. Logos rather
+                than wordmarks — the name still reaches assistive tech and hover
+                through the label/title on each tile. */}
+            <div className="lg:py-1">
               <h3 className="text-caption font-semibold uppercase tracking-[0.12em] text-ink-black">
                 Built with
               </h3>
-              {/* Logos rather than wordmarks. The name still reaches assistive
-                  tech and hover via the label/title on each tile. */}
               <ul className="mt-6 flex flex-wrap gap-3">
                 {services.stack.map((tech) => (
                   <li key={tech}>
@@ -56,7 +58,7 @@ export function Services() {
                       title={tech}
                       aria-label={tech}
                       role="img"
-                      className="flex size-12 items-center justify-center rounded-2xl bg-ash-mist text-graphite transition-transform duration-200 hover:-translate-y-0.5"
+                      className="flex size-14 items-center justify-center rounded-2xl bg-paper-white text-graphite shadow-glow transition-transform duration-200 hover:-translate-y-0.5"
                     >
                       <TechLogo name={tech} className="size-7" />
                     </span>

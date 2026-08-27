@@ -27,7 +27,6 @@ export function SelectedWork() {
           <h2 className="max-w-2xl font-display text-[clamp(2.25rem,4.5vw,3rem)] leading-[1.05] text-ink-black">
             {selectedWork.heading}
           </h2>
-          <p className="mt-5 max-w-xl text-body text-smoke">{selectedWork.intro}</p>
         </Reveal>
 
         <Reveal delay={80}>
@@ -63,7 +62,7 @@ export function SelectedWork() {
                 {project.services.map((service) => (
                   <li
                     key={service}
-                    className="rounded-pill bg-ash-mist px-3 py-1.5 text-caption text-graphite"
+                    className="rounded-pill bg-signal-blue/10 px-3.5 py-2 text-caption font-semibold text-signal-blue-text"
                   >
                     {service}
                   </li>

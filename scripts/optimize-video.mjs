@@ -24,9 +24,13 @@
  *      holds the poster frame instead — which is why the poster has to be a
  *      real frame of the clip rather than a separate illustration.
  *
- *   3. The sources are 1080px square for slots that render at 176 CSS px.
- *      Downscaling to 600 is still comfortably past 2x on a retina screen and
- *      is most of the size win: the densest clip goes 2537 KB -> ~317 KB.
+ *   3. Resolution and crf are set for linework, not for the byte count. An
+ *      earlier pass ran 600px at crf 32-34, which is ample for flat colour but
+ *      too coarse for hairline outlines: the encoder kept them on some frames
+ *      and dropped them on others, so the shapes visibly shimmered. 900px at
+ *      crf 24 holds them steady. The clips are lazy-loaded and never fetched
+ *      under reduced motion, so the extra weight costs nothing until a card is
+ *      actually on screen.
  */
 import { spawnSync } from "node:child_process";
 import { mkdir, readdir, stat } from "node:fs/promises";
@@ -38,21 +42,30 @@ const VIDEO_OUT = "public/videos";
 /** Poster frames land here for `npm run images` to pick up. */
 const FRAME_OUT = "assets/source/motion/frames";
 
-/** Key pure black back to transparent. See note 1 above before loosening this. */
-const KEY = "colorkey=0x000000:0.08:0.06";
+/**
+ * Key pure black back to transparent.
+ *
+ * The tolerance is 0.01, i.e. almost nothing but true black. A looser key was
+ * tried first at 0.08 and it bit into the thin near-black outlines around the
+ * artwork's shapes, which then flickered in and out frame to frame as the
+ * encoder made different decisions about them. Measured across 0.01, 0.03 and
+ * 0.06 at this quality, every one of them cleared the background completely —
+ * zero leftover dark pixels — because the source really was flattened onto pure
+ * black. So the tightest key costs nothing and preserves the most linework.
+ */
+const KEY = "colorkey=0x000000:0.01:0.02";
 
 const CLIPS = [
   /*
-   * strategy and care carry a drifting field of small bright dots, which is
-   * noise as far as the codec is concerned and costs far more than their
-   * sparse look suggests — at crf 32 they were 740 KB and 550 KB against
-   * 150 KB for the much busier code clip. A slightly higher crf buys most of
-   * that back with nothing visible on their thin linework.
+   * strategy and care carry a drifting field of small bright dots, which reads
+   * as noise to the codec and costs far more than their sparse look suggests.
+   * They were the two clips a higher crf was traded against; at 24 they are the
+   * heaviest of the four and that is the price of steady linework.
    */
-  { file: "StrategyAndDesign.mp4", out: "strategy", width: 600, crf: 34, poster: 6.0 },
-  { file: "PixelPerfectInterfaces.mp4", out: "interfaces", width: 600, crf: 32, poster: 4.0 },
-  { file: "ModernPerformantCode.mp4", out: "code", width: 600, crf: 32, poster: 2.0 },
-  { file: "LaunchAndOngoingCare.mp4", out: "care", width: 600, crf: 34, poster: 6.0 },
+  { file: "StrategyAndDesign.mp4", out: "strategy", width: 900, crf: 24, poster: 6.0 },
+  { file: "PixelPerfectInterfaces.mp4", out: "interfaces", width: 900, crf: 24, poster: 4.0 },
+  { file: "ModernPerformantCode.mp4", out: "code", width: 900, crf: 24, poster: 2.0 },
+  { file: "LaunchAndOngoingCare.mp4", out: "care", width: 900, crf: 24, poster: 6.0 },
 ];
 
 const KB = (bytes) => `${(bytes / 1024).toFixed(0)} KB`;

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { caseStudies, site } from "@/content/site";
-import { Icon } from "@/components/ui/Icons";
 import { PillButton } from "@/components/ui/PillButton";
 import { PixelImage } from "@/components/ui/PixelImage";
 import { Reveal } from "@/components/ui/Reveal";
@@ -31,16 +30,6 @@ export default function CaseStudiesPage() {
             </h1>
 
             <p className="mt-6 max-w-xl text-body text-smoke">{caseStudies.intro}</p>
-
-            {/*
-              Deliberately loud and hard to miss. This page ships invented
-              figures; nobody should be able to skim it and mistake them for
-              real results.
-            */}
-            <p className="mt-8 flex items-start gap-3 rounded-2xl border border-amber-300/70 bg-amber-50 p-4 text-body-sm text-amber-900">
-              <Icon name="shield" size={18} className="mt-0.5 shrink-0" />
-              <span>{caseStudies.placeholderNotice}</span>
-            </p>
           </Reveal>
         </div>
       </section>
