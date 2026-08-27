@@ -45,28 +45,36 @@ const FRAME_OUT = "assets/source/motion/frames";
 /**
  * Key pure black back to transparent.
  *
- * The tolerance is 0.01, i.e. almost nothing but true black. A looser key was
- * tried first at 0.08 and it bit into the thin near-black outlines around the
- * artwork's shapes, which then flickered in and out frame to frame as the
- * encoder made different decisions about them. Measured across 0.01, 0.03 and
- * 0.06 at this quality, every one of them cleared the background completely —
- * zero leftover dark pixels — because the source really was flattened onto pure
- * black. So the tightest key costs nothing and preserves the most linework.
+ * Tolerance 0.01, i.e. almost nothing but true black. Measured across 0.01,
+ * 0.03 and 0.06, every tolerance cleared the background completely — zero
+ * leftover dark pixels — because the source really was flattened onto pure
+ * black, so the tightest key costs nothing and keeps the most linework. The
+ * soft 0.02 blend is worth keeping now that alpha is stored losslessly: the
+ * anti-aliased edge it produces survives the encode exactly.
  */
 const KEY = "colorkey=0x000000:0.01:0.02";
 
+/**
+ * 480px is chosen against the lossless cost curve, not against a quality
+ * target. The square cards render at 176 CSS px, so 480 is still comfortably
+ * past 2x on a retina screen, and it keeps the four clips near 7 MB where 600px
+ * would be ~10 MB and 900px ~20 MB.
+ */
+const WIDTH = 480;
+
 const CLIPS = [
-  /*
-   * strategy and care carry a drifting field of small bright dots, which reads
-   * as noise to the codec and costs far more than their sparse look suggests.
-   * They were the two clips a higher crf was traded against; at 24 they are the
-   * heaviest of the four and that is the price of steady linework.
-   */
-  { file: "StrategyAndDesign.mp4", out: "strategy", width: 900, crf: 24, poster: 6.0 },
-  { file: "PixelPerfectInterfaces.mp4", out: "interfaces", width: 900, crf: 24, poster: 4.0 },
-  { file: "ModernPerformantCode.mp4", out: "code", width: 900, crf: 24, poster: 2.0 },
-  { file: "LaunchAndOngoingCare.mp4", out: "care", width: 900, crf: 24, poster: 6.0 },
+  { file: "StrategyAndDesign.mp4", out: "strategy", poster: 6.0 },
+  { file: "PixelPerfectInterfaces.mp4", out: "interfaces", poster: 4.0 },
+  { file: "ModernPerformantCode.mp4", out: "code", poster: 2.0 },
+  { file: "LaunchAndOngoingCare.mp4", out: "care", poster: 6.0 },
 ];
+
+/**
+ * Poster frames are cut at full width regardless of WIDTH. They compress to a
+ * few KB as WebP either way, so there is no reason to hand the stills the
+ * video's size budget.
+ */
+const POSTER_WIDTH = 900;
 
 const KB = (bytes) => `${(bytes / 1024).toFixed(0)} KB`;
 
@@ -94,7 +102,7 @@ async function main() {
   let before = 0;
   let after = 0;
 
-  for (const { file, out, width, crf, poster } of CLIPS) {
+  for (const { file, out, poster } of CLIPS) {
     if (!present.has(file)) {
       console.warn(`skipping ${out}: ${path.join(SRC, file)} not found`);
       continue;
@@ -106,7 +114,7 @@ async function main() {
 
     // scale=W:-2 keeps the source ratio and rounds the height to an even
     // number, which yuv420p chroma subsampling requires.
-    const chain = `${KEY},scale=${width}:-2`;
+    const chain = `${KEY},scale=${WIDTH}:-2`;
 
     run([
       "-hide_banner", "-loglevel", "error", "-y",
@@ -115,8 +123,19 @@ async function main() {
       "-c:v", "libvpx-vp9",
       "-pix_fmt", "yuva420p",
       "-auto-alt-ref", "0",
-      "-b:v", "0",
-      "-crf", String(crf),
+      /*
+       * Lossless, and this is the whole point of the file.
+       *
+       * VP9 stores alpha as a second compressed plane. Under any lossy setting
+       * that plane is requantised independently each frame, and on hairline
+       * artwork the edge alpha lands differently every time — so outlines
+       * visibly wink on and off. Measured on the interfaces clip, the count of
+       * partially transparent pixels swung 39.5% frame to frame at crf 24 and
+       * 32.8% with a hard-edged key; lossless brings it to 2.3%, which reads as
+       * steady. Raising the bitrate or tightening the key does not help,
+       * because neither is the cause.
+       */
+      "-lossless", "1",
       "-row-mt", "1",
       "-cpu-used", "2",
       "-an",
@@ -129,7 +148,7 @@ async function main() {
       "-hide_banner", "-loglevel", "error", "-y",
       "-ss", String(poster),
       "-i", src,
-      "-vf", chain,
+      "-vf", `${KEY},scale=${POSTER_WIDTH}:-2`,
       "-frames:v", "1",
       "-pix_fmt", "rgba",
       frame,
@@ -142,7 +161,7 @@ async function main() {
 
     rows.push({
       clip: `${file} -> ${out}.webm`,
-      width: `${width}w`,
+      width: `${WIDTH}w`,
       from: KB(srcSize),
       to: KB(outSize),
       saved: `${(100 - (outSize / srcSize) * 100).toFixed(1)}%`,
