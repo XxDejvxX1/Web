@@ -1,5 +1,4 @@
 import { services } from "@/content/site";
-import { Icon } from "@/components/ui/Icons";
 import { Reveal } from "@/components/ui/Reveal";
 import { TechLogo } from "@/components/ui/TechLogos";
 
@@ -12,12 +11,24 @@ import { TechLogo } from "@/components/ui/TechLogos";
  * services three separate times. The cards are gone; these two panels are what
  * was actually load-bearing.
  *
- * They are now one panel rather than two. The previous layout put the
- * deliverables in a bordered card and the stack tiles loose on the canvas
- * beside it — two halves with no shared structure, which read as an unfinished
- * column next to a finished one. Held inside a single sheet with a rule down the
- * middle, they become what they actually are: a spec sheet with the work on one
- * side and what it is built from on the other.
+ * It is now an editorial index rather than a two-column sheet. The previous
+ * layout paired a column of bare deliverable labels — each with a checkmark
+ * against it — with a 4x2 grid of unlabelled logo tiles. Two problems: the
+ * checkmark column is the generic pricing-table pattern, five things ticked off
+ * with nothing to actually read, and the tiles carried more visual weight than
+ * the deliverables while naming none of the technologies they stood for (the
+ * name lived in a `title` attribute you had to hover to find).
+ *
+ * Restructured as a numbered index, in the Steep/Awesomic register: hairline
+ * rules do the structural work instead of enclosure, each row earns its space
+ * with a line of copy, and the stack drops to a footer strip of ghost tag pills
+ * that read as typographic labels rather than badges.
+ *
+ * Index numerals stay in Inter. DESIGN.md is explicit that the display serif is
+ * "display-only at 36px and above", and five serif numerals at row scale would
+ * both break that rule and shout over the heading. Quiet tabular numerals are
+ * what an index wants anyway. Process, whose four numerals do run at display
+ * size, is where the serif treatment belongs.
  */
 export function Services() {
   return (
@@ -25,64 +36,70 @@ export function Services() {
       <div className="mx-auto max-w-[var(--container-page)]">
         <Reveal>
           <div className="rounded-panel bg-paper-white p-7 shadow-glow sm:p-10 lg:p-14">
-            <div className="grid gap-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,6fr)] lg:gap-16">
-              {/* Pushed apart rather than stacked: the heading holds the top of
-                  the sheet and the stack sits on its floor, so the column reaches
-                  the same depth as the list beside it instead of trailing off. */}
-              <div className="flex flex-col justify-between gap-12">
-                <h2 className="font-display text-[clamp(2.25rem,4.5vw,3rem)] leading-[1.05] text-ink-black">
-                  {services.heading}
-                </h2>
+            {/* Heading and lede sit on a shared baseline, magazine-masthead
+                style, rather than the lede hanging under the heading. */}
+            <div className="grid gap-x-16 gap-y-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:items-end">
+              <h2 className="font-display text-[clamp(2.25rem,4.5vw,3rem)] leading-[1.05] text-ink-black">
+                {services.heading}
+              </h2>
+              <p className="max-w-xl text-body text-smoke lg:pb-2">
+                {services.lede}
+              </p>
+            </div>
 
-                <div>
-                  <h3 className="text-caption font-semibold uppercase tracking-[0.12em] text-smoke">
-                    Built with
+            {/*
+              The index. Three columns on wide screens — numeral, name,
+              description — so the names align into a readable column of their
+              own instead of each being trapped in a card.
+
+              Below lg the description drops under the name and spans back to
+              the numeral's gutter, which keeps the numerals as a clean left
+              rail at every width.
+            */}
+            <ol className="mt-11 border-t border-black/[0.07] lg:mt-14">
+              {services.deliverables.map((item, index) => (
+                <li
+                  key={item.name}
+                  className="grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-x-4 border-b border-black/[0.07] py-6 sm:gap-x-6 lg:grid-cols-[auto_minmax(0,4fr)_minmax(0,6fr)] lg:gap-x-10 lg:py-7"
+                >
+                  {/* Decorative: the ordered list already numbers these for
+                      assistive tech, and a read-aloud "01 Custom Website" is
+                      just noise. */}
+                  <span
+                    aria-hidden="true"
+                    className="text-caption font-medium tabular-nums text-smoke/70"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+
+                  <h3 className="text-heading-sm font-semibold text-ink-black">
+                    {item.name}
                   </h3>
 
-                  {/*
-                    Ash-mist tiles, not white. The stack used to sit on the page
-                    canvas where a white tile with a pale glow ring read as
-                    raised; inside a white sheet that same tile would disappear,
-                    so the recessed tone is the one that works here.
+                  <p className="col-start-2 mt-2 text-body-sm text-smoke lg:col-start-3 lg:mt-0">
+                    {item.description}
+                  </p>
+                </li>
+              ))}
+            </ol>
 
-                    Four across, exactly two rows. Left to wrap, eight tiles
-                    broke 5-and-3 against this column and the ragged row read as
-                    an accident.
-                  */}
-                  <ul className="mt-5 grid w-max grid-cols-4 gap-2.5">
-                    {services.stack.map((tech) => (
-                      <li key={tech}>
-                        <span
-                          title={tech}
-                          aria-label={tech}
-                          role="img"
-                          className="flex size-13 items-center justify-center rounded-2xl bg-ash-mist text-graphite transition-transform duration-200 hover:-translate-y-0.5"
-                        >
-                          <TechLogo name={tech} className="size-7" />
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+            {/*
+              The stack, as labelled ghost pills. Hairline ring, no fill: they
+              group without visual weight, so the eye still lands on the index
+              above them. Each pill now says the name it used to hide.
+            */}
+            <div className="mt-10 lg:mt-12">
+              <h3 className="text-caption font-semibold uppercase tracking-[0.12em] text-smoke">
+                {services.stackLabel}
+              </h3>
 
-              {/* The rule is the sheet's spine on wide screens; below lg the
-                  columns stack and it would be a line across the middle of
-                  nothing, so it only exists from lg up. */}
-              <ul className="divide-y divide-black/[0.07] border-t border-black/[0.07] lg:border-t-0 lg:border-l lg:border-black/[0.07] lg:pl-16">
-                {services.deliverables.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-center justify-between gap-6 py-5 lg:py-6 lg:first:pt-0"
-                  >
-                    <span className="text-heading-sm font-semibold text-ink-black">
-                      {item}
+              <ul className="mt-5 flex flex-wrap gap-2">
+                {services.stack.map((tech) => (
+                  <li key={tech}>
+                    <span className="flex items-center gap-2 rounded-pill border border-black/[0.09] py-1.5 pl-2.5 pr-3.5 text-body-sm text-graphite transition-colors duration-200 hover:border-black/20">
+                      <TechLogo name={tech} className="size-4.5 shrink-0" />
+                      {tech}
                     </span>
-                    <Icon
-                      name="check"
-                      size={16}
-                      className="shrink-0 text-signal-blue"
-                    />
                   </li>
                 ))}
               </ul>

@@ -122,15 +122,43 @@ export const services = {
    * section does not: the concrete deliverables list and the stack.
    */
   heading: "What you actually get",
+  lede: "Every project is scoped to what it actually needs. These are the pieces we build, and the stack we build them on.",
 
+  /*
+   * Each deliverable carries its own line of copy. As bare labels beside a
+   * column of checkmarks they read as a pricing table — five things ticked off
+   * and nothing to actually read. The description is what makes the row worth
+   * the space it takes.
+   */
   deliverables: [
-    "Custom Website",
-    "Web Application",
-    "Admin Dashboard",
-    "API Integration",
-    "Documentation & Handover",
+    {
+      name: "Custom Website",
+      description:
+        "Designed around your brand and your content, not dropped into a template. Fast, responsive, and yours to edit.",
+    },
+    {
+      name: "Web Application",
+      description:
+        "Portals, booking systems and internal tools — accounts, data and business logic built to hold up as you grow.",
+    },
+    {
+      name: "Admin Dashboard",
+      description:
+        "Somewhere for your team to manage content, bookings and users without going anywhere near the code.",
+    },
+    {
+      name: "API Integration",
+      description:
+        "Payments, calendars, CRMs and whatever else you already run, wired in properly and kept in sync.",
+    },
+    {
+      name: "Documentation & Handover",
+      description:
+        "Written docs and a walkthrough on launch day, so the project can outlive whoever built it.",
+    },
   ],
 
+  stackLabel: "Built with",
   stack: [
     "React",
     "Next.js",
@@ -145,11 +173,12 @@ export const services = {
 
 export const process = {
   heading: "How we do it",
+  lede:
+    "Four stages, a fixed quote before anything starts, and a staging URL you can check any day of the week.",
 
   /**
-   * Rendered as alternating vertical rows — artwork one side, copy the other,
-   * flipping each step. Images are square and deliberately restrained so the
-   * text keeps equal weight.
+   * Rendered as full-width numbered rows: serif numeral, copy, artwork, with a
+   * rail running down the numerals to carry the sequence.
    */
   steps: [
     {
