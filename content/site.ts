@@ -57,6 +57,10 @@ export const howItWorks = {
   /**
    * The first card renders tall down the left column; the rest stack on the
    * right. Order here is the order on the page.
+   *
+   * `id` also selects the card's motion graphic from MOTION_SCENES in
+   * components/ui/motion — the artwork is drawn, not a file, so there is no
+   * asset path to carry here. `alt` describes what that scene does.
    */
   cards: [
     {
@@ -64,36 +68,28 @@ export const howItWorks = {
       icon: "nodes",
       title: "Strategy & Design",
       body: "We start with your goals, not a template. Positioning, site structure and a design system built to fit — so every screen earns its place before a line of code is written.",
-      image: "/images/motion/strategy.webp",
-      video: "/videos/strategy.webm",
-      alt: "An animation in which scattered points gather into a full page layout and then disperse again",
+      alt: "Scattered points snap onto a four-column grid, wireframe blocks grow into a finished page layout with spacing measures, then it all dissolves back to points",
     },
     {
       id: "interfaces",
       icon: "layers",
       title: "Pixel-Perfect Interfaces",
       body: "Designs that hold up at every size. Considered typography, honest spacing and interaction states that feel deliberate rather than default.",
-      image: "/images/motion/interfaces.webp",
-      video: "/videos/interfaces.webm",
-      alt: "An animation of a magnifier sweeping across an interface mockup, inspecting its grid and alignment",
+      alt: "A loupe sweeps across an interface card and magnifies the pixel grid under a misaligned button, which snaps into line with its alignment guides",
     },
     {
       id: "code",
       icon: "code",
       title: "Modern, Performant Code",
       body: "Next.js and TypeScript, statically rendered where it counts. Accessible markup, clean architecture and performance scores you can put in a pitch deck.",
-      image: "/images/motion/code.webp",
-      video: "/videos/code.webm",
-      alt: "An animation of an editor window filling with lines of code and resolving into a finished component",
+      alt: "Lines of code type themselves into an editor, collapse into a single bundle, then open into a load waterfall that shrinks beside a score dial sweeping up",
     },
     {
       id: "care",
       icon: "shield",
       title: "Launch & Ongoing Care",
       body: "We do not disappear at handover. Documentation, a walkthrough and an optional maintenance plan keep the site fast, secure and current.",
-      image: "/images/motion/care.webp",
-      video: "/videos/care.webm",
-      alt: "An animation of a performance curve arcing upward beneath a site preview card",
+      alt: "A product tile climbs an arc off the ground, opens into a live app card, then monitoring rings pulse outward as health checks light up",
     },
   ],
 } as const;

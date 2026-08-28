@@ -1,7 +1,6 @@
 import { howItWorks } from "@/content/site";
 import { Icon, type IconName } from "@/components/ui/Icons";
-import { MotionGraphic } from "@/components/ui/MotionGraphic";
-import { PixelImage } from "@/components/ui/PixelImage";
+import { MOTION_SCENES, type MotionSceneName } from "@/components/ui/motion";
 import { Reveal } from "@/components/ui/Reveal";
 
 const [feature, ...rest] = howItWorks.cards;
@@ -22,38 +21,16 @@ const cardShell =
   "relative flex flex-col overflow-hidden rounded-card bg-paper-white shadow-glow";
 
 /**
- * `video` is optional so a card can be moved to motion on its own. The still is
- * never dropped when it is: it doubles as the clip's poster, which is what
- * reduced-motion and no-JS visitors keep.
- */
-type CardArtwork = {
-  image: string;
-  alt: string;
-  video?: string;
-};
-
-/** Centres the artwork in its slot at whatever ratio it was authored at. */
-const media = "absolute inset-0 m-auto max-h-full w-auto max-w-full object-contain";
-
-/**
- * The artwork slot: the soft GLOW wash, and whichever medium sits on it.
+ * The artwork slot: the soft GLOW wash, with the card's motion graphic on it.
  *
- * Both media are transparent, so the backdrop is the same either way. The clips
- * arrive as H.264, which cannot carry alpha, and `npm run video` keys the black
- * they were flattened onto back out into a WebM — see scripts/optimize-video.mjs
- * for why that is a colour key rather than a luma matte.
+ * The scenes are inline SVG rather than video, so they are transparent by
+ * construction and the first paint is server-rendered — the clock only adds
+ * movement to a picture that is already there. `preserveAspectRatio` does the
+ * work `object-contain` used to: the scene centres in the slot at whatever
+ * ratio it was authored at.
  */
-function CardArt({
-  card,
-  width,
-  height,
-  sizes,
-}: {
-  card: CardArtwork;
-  width: number;
-  height: number;
-  sizes: string;
-}) {
+function CardArt({ card }: { card: { id: MotionSceneName; alt: string } }) {
+  const Scene = MOTION_SCENES[card.id];
   return (
     <>
       <div
@@ -61,25 +38,7 @@ function CardArt({
         style={{ background: GLOW }}
         aria-hidden="true"
       />
-      {card.video ? (
-        <MotionGraphic
-          src={card.video}
-          poster={card.image}
-          alt={card.alt}
-          width={width}
-          height={height}
-          className={media}
-        />
-      ) : (
-        <PixelImage
-          src={card.image}
-          alt={card.alt}
-          width={width}
-          height={height}
-          sizes={sizes}
-          className={media}
-        />
-      )}
+      <Scene label={card.alt} className="absolute inset-0 h-full w-full" />
     </>
   );
 }
@@ -127,12 +86,7 @@ export function HowItWorks() {
               <CardHeader icon={feature.icon} title={feature.title} body={feature.body} />
 
               <div className="relative mt-8 min-h-[300px] flex-1">
-                <CardArt
-                  card={feature}
-                  width={720}
-                  height={1440}
-                  sizes="(max-width: 1024px) 90vw, 340px"
-                />
+                <CardArt card={feature} />
               </div>
             </article>
           </Reveal>
@@ -147,12 +101,7 @@ export function HowItWorks() {
                 </div>
 
                 <div className="relative h-40 shrink-0 sm:h-44 sm:w-[38%]">
-                  <CardArt
-                    card={card}
-                    width={800}
-                    height={800}
-                    sizes="(max-width: 640px) 60vw, 300px"
-                  />
+                  <CardArt card={card} />
                 </div>
               </article>
             </Reveal>

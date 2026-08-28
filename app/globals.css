@@ -193,6 +193,94 @@
     }
   }
 
+  /*
+   * Section washes.
+   *
+   * Every hue here is lifted from the hero's dusk gradient — sky-blue, violet,
+   * mauve, coral — held at 8-14% over the ash-mist canvas. That is the point:
+   * the page gets a colour rhythm without a second accent entering the system,
+   * because these are the atmosphere the hero already established, thinned out.
+   *
+   * Applied to the <section> rather than its container, so the colour runs edge
+   * to edge while the content stays on the 1200px grid.
+   */
+  /*
+   * Every wash lays this over its colour first: canvas at the top and bottom
+   * edges, clear through the middle. Without it a band ends on whatever hue it
+   * happened to be carrying, and where two washed sections meet — Recent work
+   * into the FAQ — the join is a hard horizontal cut across the page. Fading
+   * both edges back to canvas means bands always hand off at the same neutral,
+   * so the colour reads as atmosphere inside a section rather than a stripe
+   * painted over it.
+   */
+  .wash-atmosphere,
+  .wash-warm,
+  .wash-cool {
+    --wash-edge: linear-gradient(
+      to bottom,
+      var(--color-ash-mist) 0%,
+      transparent 14%,
+      transparent 86%,
+      var(--color-ash-mist) 100%
+    );
+  }
+
+  .wash-atmosphere {
+    background:
+      var(--wash-edge),
+      radial-gradient(105% 78% at 4% -12%, rgba(74, 127, 242, 0.19) 0%, transparent 62%),
+      radial-gradient(88% 72% at 98% 2%, rgba(201, 138, 181, 0.2) 0%, transparent 64%),
+      radial-gradient(120% 88% at 44% 114%, rgba(232, 168, 124, 0.22) 0%, transparent 66%),
+      var(--color-ash-mist);
+  }
+
+  .wash-warm {
+    background:
+      var(--wash-edge),
+      radial-gradient(78% 105% at 102% -10%, rgba(232, 168, 124, 0.24) 0%, transparent 62%),
+      radial-gradient(74% 100% at -6% 106%, rgba(201, 138, 181, 0.19) 0%, transparent 64%),
+      var(--color-ash-mist);
+  }
+
+  .wash-cool {
+    background:
+      var(--wash-edge),
+      radial-gradient(78% 105% at -2% -10%, rgba(74, 127, 242, 0.17) 0%, transparent 62%),
+      radial-gradient(82% 105% at 106% 108%, rgba(123, 126, 216, 0.21) 0%, transparent 64%),
+      var(--color-ash-mist);
+  }
+
+  /*
+   * The dwell timer under the active project tab, and the clock that drives it.
+   *
+   * The bar is not a readout of a timer running elsewhere — it *is* the timer.
+   * The tab list advances on this animation's `animationend`, which means
+   * pausing the animation pauses the rotation, with no JS interval to keep in
+   * sync. Two things fall out of that for free: `data-paused` (set while the
+   * pointer is over the rail, while focus is inside it, and while the section is
+   * off screen) holds both the bar and the rotation, and reduced motion removes
+   * the animation entirely, so the rotation never fires and the rail becomes a
+   * plain click-to-switch list with the active row marked.
+   */
+  @keyframes work-dwell {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .work-dwell {
+    transform-origin: left center;
+    transform: scaleX(0);
+    animation: work-dwell var(--work-dwell, 6s) linear forwards;
+  }
+
+  [data-paused="true"] .work-dwell {
+    animation-play-state: paused;
+  }
+
   /* Scroll reveal. Starts hidden only when JS will actually run. */
   .reveal {
     opacity: 0;
@@ -393,6 +481,18 @@ details.faq-item[open]::details-content {
   .scroll-reveal {
     animation: none !important;
     clip-path: none !important;
+  }
+
+  /*
+   * Must be `animation: none`, not a shortened duration. The blanket rule below
+   * collapses every animation to 0.001ms, and this one fires the tab rotation on
+   * `animationend` — left to that rule the projects would strobe. Killing the
+   * animation outright stops the rotation dead and leaves the bar drawn full, so
+   * the rail marks its active row and waits to be clicked.
+   */
+  .work-dwell {
+    animation: none !important;
+    transform: scaleX(1);
   }
 
   *,

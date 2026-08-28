@@ -8,10 +8,13 @@ import { Reveal } from "@/components/ui/Reveal";
  */
 export function Faq() {
   return (
-    <section id="faq" className="px-4 py-24 sm:py-28 lg:py-32">
+    <section id="faq" className="wash-cool px-4 py-24 sm:py-28 lg:py-32">
       <div className="mx-auto max-w-[var(--container-page)]">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
-          <Reveal>
+          {/* Sticky from lg: a three-letter heading alone in a half-page column
+              leaves a void, and travelling with the questions turns that column
+              into a label for what the reader is actually looking at. */}
+          <Reveal className="lg:sticky lg:top-12 lg:self-start">
             <h2 className="font-display text-[clamp(2.25rem,4.5vw,3rem)] leading-[1.05] text-ink-black">
               {faq.heading}
             </h2>
