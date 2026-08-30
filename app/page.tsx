@@ -7,6 +7,7 @@ import { Process } from "@/components/sections/Process";
 import { SelectedWork } from "@/components/sections/SelectedWork";
 import { Faq } from "@/components/sections/Faq";
 import { FinalCta } from "@/components/sections/FinalCta";
+import { StickyCta } from "@/components/ui/StickyCta";
 
 /**
  * Each section is standalone and route-agnostic. To promote one to its own page
@@ -25,6 +26,7 @@ export default function HomePage() {
       <SelectedWork />
       <Faq />
       <FinalCta />
+      <StickyCta />
     </>
   );
 }

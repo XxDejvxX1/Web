@@ -167,6 +167,13 @@ The site targets WCAG 2.1 AA.
 
 One thing to preserve if you edit colours: `DESIGN.md`'s accent `#007aff` measures **4.02:1**
 on white, below the 4.5:1 that normal-size text requires. It remains the brand colour for
-button fills, 36px+ display type and icons — all of which only need 3:1 — while a darker
+36px+ display type and icons — which only need 3:1 — while a darker
 `--color-signal-blue-text` (`#0062cc`, 5.8:1) carries small text such as eyebrow labels and
 inline links. Use `text-signal-blue-text` for any new body-size blue text.
+
+**A filled button is two contrast checks, not one.** This note used to list "button fills"
+as safe at 3:1, which is true of the fill against the canvas and false of the white *label*
+sitting on it — that label is normal-size text and needs 4.5:1. White on `#007aff` was
+shipping at 4.02:1 on every "Start a Project" button. The primary pill fill is therefore
+`--color-signal-blue-text` (white on it: 5.8:1), hovering to `#0056b3` (7.04:1). If you add
+a filled control whose label is under 24px, check the label against the fill.

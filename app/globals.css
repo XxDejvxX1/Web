@@ -20,9 +20,16 @@
   /*
    * DESIGN.md's #007aff is iOS system blue, which measures 4.02:1 on white and
    * 3.75:1 on the canvas — below the 4.5:1 WCAG AA needs for normal-size text.
-   * It stays the brand accent for fills, 36px+ display type and icons (all of
-   * which only need 3:1); this darker sibling (5.8:1 / 5.4:1) carries small
-   * text such as eyebrow labels and inline links.
+   * It stays the brand accent for 36px+ display type and icons, which only
+   * need 3:1; this darker sibling (5.8:1 / 5.4:1) carries small text such as
+   * eyebrow labels and inline links.
+   *
+   * "Fills" is NOT on that safe list, and reading it that way is what let the
+   * primary button ship failing. A filled button is two separate contrast
+   * questions: the fill against the canvas (3:1, which #007aff passes) and the
+   * *label against the fill* (4.5:1 at 14px/600, which white on #007aff fails
+   * at 4.02:1). Any filled control whose label is normal-size text takes
+   * signal-blue-text, not signal-blue. See components/ui/PillButton.tsx.
    */
   --color-signal-blue-text: #0062cc;
   --color-ink-black: #000000;

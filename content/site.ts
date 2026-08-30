@@ -129,46 +129,60 @@ export const services = {
    * column of checkmarks they read as a pricing table — five things ticked off
    * and nothing to actually read. The description is what makes the row worth
    * the space it takes.
+   *
+   * `stack` is what the row is built from, and it is per-row for a reason: as
+   * a single strip at the foot of the section, the technologies were a list a
+   * visitor had no way to connect to anything above them. Against the thing
+   * they build, they answer a question the reader is actually holding.
+   *
+   * `receives` is the same slot on the one row that is not built from
+   * anything. Handover is what you are given rather than what it is made of,
+   * so it takes the accent treatment instead of the logo pills.
+   *
+   * ⚠️ TODO: confirm the four stack rows. Every other line in this section is
+   * yours; this mapping is the one thing on the page that was proposed rather
+   * than recorded.
    */
   deliverables: [
     {
       name: "Custom Website",
       description:
         "Designed around your brand and your content, not dropped into a template. Fast, responsive, and yours to edit.",
+      stack: ["Next.js", "TypeScript", "Tailwind CSS", "Cloudflare"],
+      receives: [],
     },
     {
       name: "Web Application",
       description:
         "Portals, booking systems and internal tools — accounts, data and business logic built to hold up as you grow.",
+      stack: ["React", "Next.js", "Node.js", "PostgreSQL"],
+      receives: [],
     },
     {
       name: "Admin Dashboard",
       description:
         "Somewhere for your team to manage content, bookings and users without going anywhere near the code.",
+      stack: ["React", "TypeScript", "PostgreSQL"],
+      receives: [],
     },
     {
       name: "API Integration",
       description:
         "Payments, calendars, CRMs and whatever else you already run, wired in properly and kept in sync.",
+      stack: ["Node.js", "TypeScript", "AWS"],
+      receives: [],
     },
     {
       name: "Documentation & Handover",
       description:
         "Written docs and a walkthrough on launch day, so the project can outlive whoever built it.",
+      stack: [],
+      receives: ["The repository", "Every account", "A walkthrough"],
     },
   ],
 
-  stackLabel: "Built with",
-  stack: [
-    "React",
-    "Next.js",
-    "TypeScript",
-    "Node.js",
-    "PostgreSQL",
-    "Tailwind CSS",
-    "Cloudflare",
-    "AWS",
-  ],
+  /** Closes the list on the promise the whole page is built around. */
+  footnote: "Every row ships as code you own, on accounts in your name.",
 } as const;
 
 export const process = {
@@ -177,30 +191,41 @@ export const process = {
     "Four stages, a fixed quote before anything starts, and a staging URL you can check any day of the week.",
 
   /**
-   * Rendered as full-width numbered rows: serif numeral, copy, artwork, with a
-   * rail running down the numerals to carry the sequence.
+   * Rendered as four stations on a single rule — artwork above the line, the
+   * timing and copy below it. The rail runs horizontally from lg and turns
+   * vertical below it; either way the line itself carries the sequence.
+   *
+   * ⚠️ TODO: check `duration` before this ships. These four ranges are a
+   * proposal, not a figure published anywhere else on the site: they are a
+   * plausible split of the four-to-six weeks `faq` quotes for a marketing
+   * site, and they total five to seven. Replace them with real ranges — or say
+   * so and the timings come out, leaving the stations their step names.
    */
   steps: [
     {
       title: "Discovery",
+      duration: "1 week",
       body: "A call and a short brief. We map out goals, audience, scope and budget, then send a fixed quote — no hourly guesswork.",
       image: "/images/process/discovery.webp",
       alt: "Pixel-art robot holding a magnifying glass and a treasure map",
     },
     {
       title: "Design",
+      duration: "1–2 weeks",
       body: "Structure first, then visuals. You see real designs early and often, and nothing moves forward without your sign-off.",
       image: "/images/process/design.webp",
       alt: "Pixel-art robot arranging a layout with a pen and colour swatches",
     },
     {
       title: "Build",
+      duration: "2–3 weeks",
       body: "Development on a staging URL you can visit any time. Weekly updates, so you always know exactly where the project stands.",
       image: "/images/process/build.webp",
       alt: "Pixel-art robot assembling a web page from building blocks",
     },
     {
       title: "Launch",
+      duration: "1 week",
       body: "Testing, performance tuning, analytics and deployment. You get the keys, the code and a walkthrough of how it all works.",
       image: "/images/process/launch.webp",
       alt: "Pixel-art robot cheering as a rocket lifts off",
@@ -240,9 +265,49 @@ export const faq = {
 
 export const finalCta = {
   heading: "Have an idea in mind?",
-  body: "Let's build something amazing together.",
+
+  /*
+   * This line used to read "Let's build something amazing together." — the most
+   * generic sentence on a page whose own pitch is "no templates", sitting at the
+   * exact spot the peak-end rule says gets remembered.
+   *
+   * It now says what actually happens next. Nothing here is a new claim: it is
+   * `contact.intro` restated in the second person.
+   */
+  body:
+    "Tell us what you are building. You get honest thoughts, a rough timeline and a price range — not a sales sequence.",
+
+  /**
+   * The three things that de-risk the decision, moved to the point where the
+   * decision is made.
+   *
+   * All three are already promised elsewhere on the site and are repeated here
+   * verbatim in substance, not invented: fixed price from `faq` ("quoted as a
+   * fixed price after the discovery call"), the reply window from
+   * `contact.responseNote`, and ownership from `faq` ("The code, the content,
+   * the domain and every account are yours from day one").
+   */
+  reassurance: [
+    "Fixed price after one call",
+    "Reply within one business day",
+    "You own the code and every account",
+  ],
+
   primaryCta: { label: "Start a Project", href: "/contact/" },
   secondaryCta: { label: "Book a Call", href: "/contact/" },
+} as const;
+
+/**
+ * The pill that follows the visitor down the page.
+ *
+ * The nav is `absolute`, so it leaves the viewport for good at around 800px and
+ * takes the only route to Contact with it. Between the hero button and the
+ * feature band there were three full sections — including the bento, the most
+ * persuasive stretch of the page — with nothing to click.
+ */
+export const stickyCta = {
+  label: "Start a Project",
+  href: "/contact/",
 } as const;
 
 /**

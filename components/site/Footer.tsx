@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { footer, site } from "@/content/site";
 import { mailtoHref } from "@/lib/navigation";
 import { PixelImage } from "@/components/ui/PixelImage";
@@ -30,9 +33,78 @@ import { PixelImage } from "@/components/ui/PixelImage";
 const HIT_AREA =
   "relative before:absolute before:inset-x-0 before:top-1/2 before:h-11 before:-translate-y-1/2 before:content-['']";
 
+/*
+ * How much of the panel has to be uncovered before its links are real targets.
+ *
+ * The block sits at the bottom of the panel (justify-end), so it clears the
+ * content wrapper well before the reveal finishes; two thirds is comfortably
+ * past the point where the whole block is on screen.
+ */
+const REVEAL_RATIO = 0.66;
+
 export function Footer() {
   const year = new Date().getFullYear();
   const socials = site.socials.filter((social) => social.href);
+
+  const ref = useRef<HTMLElement>(null);
+
+  /*
+   * The panel is pinned behind an opaque wrapper for the whole page, so for all
+   * but the last stretch of scrolling its links are painted over but still in
+   * the tab order. Tabbing past the closing CTA used to move focus through ~10
+   * invisible stops — a WCAG 2.4.7 failure the browser cannot even scroll into
+   * view, because by its reckoning a fixed element is already on screen.
+   *
+   * `inert` takes them out of the tab order (and the accessibility tree) until
+   * the reveal has actually uncovered them.
+   *
+   * Starts revealed on purpose: that is the state the server renders, so with
+   * JS disabled the footer stays reachable exactly as it was before. The effect
+   * corrects it on mount, which is the only situation where `inert` can apply.
+   */
+  const [revealed, setRevealed] = useState(true);
+
+  useEffect(() => {
+    const panel = ref.current;
+    if (!panel) return;
+
+    /*
+     * The scroll position past which the panel counts as revealed.
+     *
+     * Solving `scrollY + innerHeight - (scrollHeight - height) >= height * RATIO`
+     * for scrollY once, on resize, leaves the scroll handler with nothing to do
+     * but compare two numbers. None of the three inputs change while scrolling,
+     * so reading them per-event would force a layout on every frame of the
+     * reveal for an answer that cannot have changed.
+     */
+    let threshold = 0;
+
+    const recompute = () => {
+      const height = panel.offsetHeight;
+      threshold =
+        document.documentElement.scrollHeight -
+        height +
+        height * REVEAL_RATIO -
+        window.innerHeight;
+    };
+
+    const check = () => setRevealed(window.scrollY >= threshold);
+
+    const onResize = () => {
+      recompute();
+      check();
+    };
+
+    recompute();
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
 
   /*
    * Flattened for the mobile row. Built with an explicit type because `as const`
@@ -44,7 +116,11 @@ export function Footer() {
   );
 
   return (
-    <footer className="fixed inset-x-0 bottom-0 z-0 h-[var(--footer-height)] overflow-hidden">
+    <footer
+      ref={ref}
+      inert={!revealed}
+      className="fixed inset-x-0 bottom-0 z-0 h-[var(--footer-height)] overflow-hidden"
+    >
       <PixelImage
         src="/images/footer.webp"
         alt={footer.alt}

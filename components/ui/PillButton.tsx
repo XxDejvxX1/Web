@@ -13,8 +13,16 @@ import { Icon } from "./Icons";
 type Variant = "primary" | "ghost" | "onImage" | "ghostOnImage" | "glass";
 
 const variants: Record<Variant, string> = {
+  /*
+   * The fill is the darker `signal-blue-text`, not the `#007aff` accent.
+   *
+   * The accent is safe as a *fill* — a non-text component only needs 3:1. The
+   * white label sitting on that fill is text, and at 14px/600 it needs 4.5:1;
+   * white on #007aff measures 4.02:1 and fails. #0062cc takes the same pair to
+   * 5.80:1, and the hover to 7.04:1. Nothing else about the accent changes.
+   */
   primary:
-    "bg-signal-blue text-paper-white shadow-button hover:bg-[#0a6fdc] active:translate-y-px",
+    "bg-signal-blue-text text-paper-white shadow-button hover:bg-[#0056b3] active:translate-y-px",
   ghost:
     "border-[1.5px] border-ink-black text-ink-black hover:bg-ink-black hover:text-paper-white",
   onImage:
